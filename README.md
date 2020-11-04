@@ -1,0 +1,3 @@
+# supplier_platform_test
+
+采购平台selenium自动化测试脚本
