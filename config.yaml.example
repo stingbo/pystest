@@ -8,6 +8,14 @@ MENU:
         key: base_info
         name: 基础档案
         icon: menu-icon-4
+        submenu:
+            -
+                key: company_info
+                name: 企业信息
+            -
+                key: document
+                name: 证照管理
+
     SYSTEM_SETTING:
         key: system_setting
         name: 系统设置
