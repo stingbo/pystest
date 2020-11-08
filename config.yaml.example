@@ -2,3 +2,14 @@ WEBSITE:
     url: http://www.your_website_url.com
     username: xxxxxx
     password: xxxxxx
+
+MENU:
+    BASE_INFO:
+        key: base_info
+        name: 基础档案
+        icon: menu-icon-4
+    SYSTEM_SETTING:
+        key: system_setting
+        name: 系统设置
+        icon: menu-icon-111
+
