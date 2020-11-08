@@ -1,20 +1,33 @@
 # coding = utf-8
 
-from selenium import webdriver
 from selenium.webdriver.common.by import By
-from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.wait import WebDriverWait #等待页面加载某些元素
 
 class BaseInfo:
-    def companyInfo(browser, config):
-        # 显式等待元素加载
-        wait = WebDriverWait(browser, 10)
-        wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'el-submenu')))
+    def __init__(self, browser, config):
+        self.browser = browser
+        self.menu = config.get('MENU').get('BASE_INFO')
 
-        icon = config.get('MENU').get('BASE_INFO').get('icon')
-        browser.find_elements_by_class_name(icon)[0].click()
+        # 打开基础档案菜单
+        self.browser.find_elements_by_class_name(self.menu.get('icon'))[0].click()
 
-        name = config.get('MENU').get('BASE_INFO').get('submenu')[0].get('name')
-        browser.find_element(By.XPATH, "//span[text()='"+name+"']/..").click()
+    def companyInfo(self):
+        submenu_name = self.menu.get('submenu')[0].get('name') #企业信息
+        self.browser.find_element(By.XPATH, "//span[text()='"+submenu_name+"']/..").click()
 
-        return browser
+        return self.browser
+
+    def depot(self):
+        submenu_name = self.menu.get('submenu')[3].get('name') #仓库档案
+        self.browser.find_element(By.XPATH, "//span[text()='"+submenu_name+"']/..").click()
+
+        return self.browser
+
+    def addDepot(self):
+        self.browser.find_element(By.XPATH, "//button[text()='添加']").click()
+
+        self.browser.find_elements_by_name('depot_name')[0].send_keys('1234')
+        self.browser.find_elements_by_name('depot_code')[0].send_keys('1234')
+
+        self.browser.find_element(By.XPATH, "//button[@class='btn btn-info' and text()='保存']").click()
+
+        return self.browser

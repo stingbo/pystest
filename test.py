@@ -20,6 +20,15 @@ config = yaml.safe_load(f.read())
 
 browser = webdriver.Chrome()
 
+# 登录
 Login.login(browser, config)
 
-BaseInfo.companyInfo(browser, config);
+# 显式等待元素加载
+wait = WebDriverWait(browser, 10)
+wait.until(EC.presence_of_element_located((By.CLASS_NAME, 'el-submenu')))
+
+# 基础档案
+base_info = BaseInfo(browser, config)
+base_info.companyInfo()
+base_info.depot()
+base_info.addDepot()
