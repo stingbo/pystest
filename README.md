@@ -1,3 +1,3 @@
-# supplier_platform_test
+# selenium_python_test
 
-采购平台selenium自动化测试脚本
+selenium自动化测试脚本
