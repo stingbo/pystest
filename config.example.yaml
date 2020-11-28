@@ -1,0 +1,22 @@
+BROWSER:
+    type: Chrome/Firefox
+    proxyserver: browsermob-proxy
+
+WEBSITE:
+    url: http://www.your_website_url.com
+
+MENU:
+    login:
+        key: login
+        name: 登录
+        icon:
+        type: xpath
+        content: //button[@class='btn btn-primary' and text()='登录']
+        index: -1
+        action: click
+        wait:
+            type: class name
+            content: el-submenu
+        operation: [
+            {"type": "tag name", "content": "input", "value": "username", "index": 2, "action":"sendKeys"},
+            {"type": "tag name", "content": "input", "value": "password", "index": 3, "action":"sendKeys"}]
