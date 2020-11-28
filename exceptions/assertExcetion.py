@@ -1,0 +1,2 @@
+class AssertExcetion(Exception):
+    pass

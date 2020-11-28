@@ -8,11 +8,12 @@ from time import sleep
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
-from selenium.common.exceptions import TimeoutException
+from exceptions.assertExcetion import AssertExcetion
+from browsermobproxy import Server
 from utils.action import Action
+from utils.har import Log
 from utils.util import Util
 from utils.menu import Menu
-from exceptions.assertExcetion import AssertExcetion
 
 def main():
     LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
@@ -47,20 +48,29 @@ def main():
     # 合并配置
     config = Util.recursionMergeTwoDict(global_config, config)
 
+    proxyserver = config.get('BROWSER').get('proxyserver')
+    logging.info('开启代理 ' + proxyserver)
+    server = Server(proxyserver)
+    server.start()
+    proxy = server.create_proxy()
+
     browser_type = config.get('BROWSER').get('type')
     if browser_type == 'Firefox':
         options = FirefoxOptions()
         options.page_load_strategy = 'normal'
+        options.add_argument('--proxy-server={0}'.format(proxy.proxy))
         browser = webdriver.Firefox(options=options)
     elif browser_type == 'Chrome':
         options = ChromeOptions()
         options.page_load_strategy = 'normal'
+        options.add_argument('--proxy-server={0}'.format(proxy.proxy))
         browser = webdriver.Chrome(options=options)
     else:
         print('浏览器'+browser_type+':类型不支持')
         os._exit(0)
 
     logging.info('开始使用 ' + browser_type + ' 浏览器进行自动化测试')
+    proxy.new_har("req", options={'captureHeaders': True, 'captureContent': True})
 
     browser.maximize_window()
     # 浏览器等待时间
@@ -68,6 +78,7 @@ def main():
 
     url = config.get('WEBSITE').get('url')
     browser.get(url)
+    Log.logHar(proxy.har)
 
     # 初始化操作对象
     action = Action(browser)
@@ -89,6 +100,7 @@ def main():
 
     sleep(5)
     browser.quit()
+
 
 if __name__ == "__main__":
     main()

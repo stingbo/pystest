@@ -1,0 +1,26 @@
+BROWSER:
+    type: Chrome
+    proxyserver: browsermob-proxy
+
+WEBSITE:
+    url: https://www.baidu.com
+
+MENU:
+    default:
+        key: search
+        name: 搜索示例
+        type: id
+        content: su
+        index: -1
+        action: click
+        operation: 
+            -
+                name: 输入搜索信息
+                type: id
+                content: kw
+                index: -1
+                value: 测试使用selenium
+                action: sendKeys
+
+TEST:
+    - default

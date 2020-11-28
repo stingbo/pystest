@@ -1,17 +1,18 @@
 # coding = utf-8
+from time import sleep
+from selenium import webdriver
 
-class Login:
-    def login(browser, config):
-        url = config.get('WEBSITE').get('url')
-        browser.get(url)
+browser = webdriver.Chrome()
+browser.maximize_window()
+browser.get("http://47.104.80.33:3002/#/")
 
-        username = config.get('WEBSITE').get('username')
-        password = config.get('WEBSITE').get('password')
-        browser.find_elements_by_class_name('form-group')[4].find_element_by_tag_name('input').send_keys(username)
+sleep(0.3)
+browser.find_elements_by_class_name('form-group')[4].find_element_by_tag_name('input').send_keys('17600113608')
+sleep(0.3)
+browser.find_elements_by_class_name('form-group')[5].find_element_by_tag_name('input').send_keys('123456')
 
-        browser.find_elements_by_class_name('form-group')[5].find_element_by_tag_name('input').send_keys(password)
+sleep(0.3)
+browser.find_elements_by_class_name('form-group')[7].find_element_by_tag_name('button').click()
 
-        # 登录
-        browser.find_elements_by_class_name('form-group')[7].find_element_by_tag_name('button').click()
-
-        return browser
+sleep(5)
+browser.quit()
