@@ -1,0 +1,269 @@
+MENU:
+    base_info:
+        key: base_info
+        name: 基础档案
+        icon: menu-icon-4
+        type: xpath
+        content: "//span[@style='padding-left: 18px;' and text()='企业信息']/../../.."
+        index: 0
+        action: open
+        open:
+            class: is-opened
+        submenu:
+            company_info:
+                key: company_info
+                name: 企业信息
+                type: xpath
+                content: //span[text()='企业信息']/..
+                index: -1
+                action: click
+                submenu:
+                    modify:
+                        key: save
+                        name: 保存企业信息
+                        type: xpath
+                        content: //button[@class='btn btn-primary' and text()='保存']
+                        index: -1
+                        action: moveToClick
+                        operation:
+                            -
+                                name: 企业名称
+                                type: xpath
+                                content: //input[@class="form-control" and @name="name"]
+                                index: -1
+                                value: pkgpath:utils.util.Util:randGBK2312:5
+                                action: modifyKeys
+                            -
+                                name: 企业类型
+                                type: xpath
+                                content: //input[@class='el-input__inner' and @placeholder='请选择企业类型']
+                                index: -1
+                                action: click
+                            -
+                                name: 选择企业类型
+                                type: xpath
+                                content: //div[@class='el-select-dropdown el-popper']
+                                index: -2
+                                action: select.tag name.li.0
+                            -
+                                name: 年销售额
+                                type: xpath
+                                content: //input[contains(@class, "form-control") and @name="yearmoney"]
+                                index: -1
+                                value: pkgpath:utils.util.Util:randinterger:50
+                                action: modifyKeys
+                            -
+                                name: 详细地址
+                                type: xpath
+                                content: //input[contains(@class, "form-control") and @name="address"]
+                                index: -1
+                                value: pkgpath:utils.util.Util:randGBK2312:20
+                                action: modifyKeys
+                            -
+                                name: 员工总人数
+                                type: xpath
+                                content: //input[contains(@class, "form-control") and @name="employee_amount"]
+                                index: -1
+                                value: pkgpath:utils.util.Util:randinterger:10
+                                action: modifyKeys
+                            -
+                                name: 品管人员数
+                                type: xpath
+                                content: //input[contains(@class, "form-control") and @name="guannum"]
+                                index: -1
+                                value: pkgpath:utils.util.Util:randinterger:10
+                                action: modifyKeys
+                            -
+                                name: 联系电话
+                                type: xpath
+                                content: //input[contains(@class, "form-control") and @name="company_phone"]
+                                index: -1
+                                value: pkgpath:utils.util.Util:phone
+                                action: modifyKeys
+                            -
+                                name: 图片区域滚动(仅执行js代码)
+                                type: xpath
+                                content: //div[@class="el-upload el-upload--picture-card"]
+                                index: 3
+                                javascript: "arguments[0].scrollIntoView();"
+                                action: none
+                            -
+                                name: 厂房情况
+                                type: xpath
+                                content: //input[@class='el-upload__input' and @name='file']
+                                index: 4
+                                value: /home/sting/Pictures/output.jpg
+                                action: upload
+            document:
+                key: document
+                name: 证照管理
+                type: xpath
+                content: //span[text()='证照管理']/..
+                index: -1
+                action: click
+            user:
+                key: user
+                name: 用户管理
+                type: xpath
+                content: //span[text()='用户管理']/..
+                index: -1
+                action: click
+                submenu:
+                    add:
+                        key: add
+                        name: 添加账号-确定
+                        type: xpath
+                        content: //div[@class='footer-btn form-footer-button']/button[@class='btn btn-primary' and text()='确定']
+                        index: -1
+                        action: click
+                        operation:
+                            -
+                                name: 添加账号
+                                type: xpath
+                                content: //button[@class='btn btn-primary glyphicon glyphicon-plus']
+                                index: -1
+                                action: click
+                            -
+                                name: 手机号
+                                type: xpath
+                                content: //input[@class="form-control" and @name="phone"]
+                                index: -1
+                                value: pkgpath:utils.util.Util:phone
+                                action: modifyKeys
+                            -
+                                name: 昵称
+                                type: xpath
+                                content: //input[@class="form-control" and @name="nickname"]
+                                index: -1
+                                value: pkgpath:utils.util.Util:randGBK2312:4
+                                action: modifyKeys
+                            -
+                                name: 密码
+                                type: xpath
+                                content: //input[@class="form-control" and @name="pwd"]
+                                index: -1
+                                value: '123456'
+                                action: modifyKeys
+                            -
+                                name: 确认密码
+                                type: xpath
+                                content: //input[@class="form-control" and @name="confirm_pwd"]
+                                index: -1
+                                value: '123456'
+                                action: modifyKeys
+                            -
+                                name: 请输入职务
+                                type: xpath
+                                content: //input[@class="form-control" and @placeholder="请输入职务"]
+                                index: -1
+                                value: pkgpath:utils.util.Util:randGBK2312:3
+                                action: modifyKeys
+                            -
+                                name: 邮箱
+                                type: xpath
+                                content: //input[@class="form-control" and @name="email"]
+                                index: -1
+                                value: pkgpath:utils.util.Util:email
+                                action: modifyKeys
+            goods:
+                key: goods
+                name: 货品档案
+                type: xpath
+                content: //span[text()='货品档案']/..
+                index: -1
+                action: click
+                submenu:
+                    add:
+                        key: add
+                        name: 添加货品按钮
+                        type: xpath
+                        content: //button[@class='btn btn-primary' and text()='添加货品']
+                        index: -1
+                        action: click
+                        submenu:
+                            save:
+                                key: save
+                                name : 保存货品
+                                type : xpath
+                                content : //button[@class='btn btn-primary' and text()='保存']
+                                index: -1
+                                action: click
+                                operation:
+                                    -
+                                        name: 货品名称
+                                        type: xpath
+                                        content: //input[@class="form-control" and @name="goods_name"]
+                                        index: -1
+                                        value: pkgpath:utils.util.Util:randGBK2312:3
+                                        action: modifyKeys
+                                    -
+                                        name: 生产商
+                                        type: xpath
+                                        content: //input[@class="form-control" and @name="pro"]
+                                        index: -1
+                                        value: pkgpath:utils.util.Util:randGBK2312:4
+                                        action: modifyKeys
+                                    -
+                                        name: 规格
+                                        type: xpath
+                                        content: //input[@class="form-control" and @name="pakstd"]
+                                        index: -1
+                                        value: pkgpath:utils.util.Util:randGBK2312:3
+                                        action: modifyKeys
+                                    -
+                                        name: 点击选择类别
+                                        type: xpath
+                                        content: //div[@class='el-collapse-item__content']//div[@class='vue-treeselect__control']
+                                        index: -1
+                                        action: click
+                                    -
+                                        name: 选择类别
+                                        type: xpath
+                                        content: //div[@class='tree-item fl-tree-item fl-tree-item-level']
+                                        index: -1
+                                        action: click
+            depot:
+                key: depot
+                name: 仓库档案
+                type: xpath
+                content: //span[text()='仓库档案']/..
+                index: -1
+                action: click
+                submenu:
+                    add:
+                        key: add
+                        name: 添加
+                        type: xpath
+                        content: //button[text()='添加']
+                        index: -1
+                        action: click
+                        submenu:
+                            save:
+                                key: save
+                                name: 保存
+                                type: xpath
+                                content: //button[@class='btn btn-info' and text()='保存']
+                                index: -1
+                                action: click
+                                operation:
+                                    -
+                                        name: 仓库名称
+                                        type: name
+                                        content: depot_name
+                                        index: -1
+                                        value: pkgpath:utils.util.Util:randstr:4
+                                        action: sendKeys
+                                    -
+                                        name: 仓库编码
+                                        type: name
+                                        content: depot_code
+                                        index: -1
+                                        value: pkgpath:utils.util.Util:randstr:4
+                                        action: sendKeys
+
+TEST:
+    - login
+#    - base_info.company_info.modify
+#    - base_info.user.add
+    - base_info.goods.add.save
+#    - base_info.depot.add.save

@@ -1,0 +1,311 @@
+MENU:
+    delivery:
+        key: delivery
+        name: 送货
+        icon: menu-icon-42
+        type: xpath
+        content: "//span[@style='padding-left: 18px;' and text()='送货单']/../../.."
+        index: 0
+        action: open
+        open:
+            class: is-opened
+        submenu:
+            deliveryorder:
+                key: deliveryorder
+                name: 送货单
+                type: xpath
+                content: //span[text()='送货单']/..
+                index: -1
+                action: click
+                submenu:
+                    add:
+                        key: add
+                        name: 添加
+                        type: xpath
+                        content: //button[@class='btn btn-primary' and text()='添加']
+                        index: -1
+                        action: click
+                        submenu:
+                            save:
+                                key: save
+                                name: 保存散客销售送货单
+                                type: xpath
+                                content: //button[@class='btn btn-primary' and text()='保存']
+                                index: -1
+                                action: moveToClick
+                                operation:
+                                    -
+                                        name: 点击单据类型
+                                        type: xpath
+                                        content: //input[@class='el-input__inner']
+                                        index: 7
+                                        action: click
+                                    -
+                                        name: 选择单据类型
+                                        type: xpath
+                                        content: //div[@class='el-select-dropdown el-popper']
+                                        index: -2
+                                        action: select.tag name.li.1
+                                    -
+                                        name: 收货人电话
+                                        type: xpath
+                                        content: //input[@class='el-input__inner']
+                                        index: 14
+                                        value: pkgpath:utils.util.Util:phone
+                                        action: sendKeys
+                                    -
+                                        name: 送货人
+                                        type: xpath
+                                        content: //input[@class='el-input__inner']
+                                        index: 12
+                                        action: click
+                                    -
+                                        type: xpath
+                                        content: //div[@class='el-select-dropdown el-popper']
+                                        index: -2
+                                        action: select.tag name.li.0
+                                    -
+                                        name: 备注
+                                        type: xpath
+                                        content: //input[@class='el-input__inner']
+                                        index: 9
+                                        value: pkgpath:utils.util.Util:randstr:7
+                                        action: sendKeys
+                                    -
+                                        type: xpath
+                                        content: //a[@class='jump-page-link' and text()='添加货品']
+                                        index: -1
+                                        action: click
+                                    -
+                                        name: 选择货品列表
+                                        type: xpath
+                                        content: //div[@id='dialog-customer-wrapper']//div[@class='el-table__header-wrapper']//label[@class='el-checkbox']
+                                        index: 0
+                                        javascript: setAttribute.role.checkbox
+                                        action: moveToClick
+                                    -
+                                        type: xpath
+                                        content: //button[@class='btn btn-info' and text()='添加']
+                                        index: -1
+                                        action: click
+                                    -
+                                        name: 填写发货量(给列表填写数量)
+                                        type: xpath
+                                        content: ''
+                                        index: -1
+                                        value: pkgpath:utils.util.Util:randinterger:5
+                                        action: sendListKeys
+                                        contents:
+                                            -
+                                                type: xpath
+                                                content: //div[contains(@class, 'el-table__body-wrapper')]
+                                                index: 1
+                                            -
+                                                type: xpath
+                                                content: .//td[contains(@class, 'order_detail_oamount')]//input[@class='el-input__inner']
+                                                index: -2
+
+                            noneordersave:
+                                key: noneordersave
+                                name: 保存无单送货类送货单
+                                type: xpath
+                                content: //button[@class='btn btn-primary' and text()='保存']
+                                index: -1
+                                action: moveToClick
+                                listener:
+                                    -
+                                        url: /supplierclientapi/deliveryorder/create
+                                        code: 0
+                                    -
+                                        url: /supplierclientapi/businessgoodsprice/goods_list
+                                        code: 0
+                                operation:
+                                    -
+                                        name: 点击单据类型
+                                        type: xpath
+                                        content: //input[@class='el-input__inner']
+                                        index: 7
+                                        action: click
+                                    -
+                                        name: 选择无单送货
+                                        type: xpath
+                                        content: //div[@class='el-select-dropdown el-popper']
+                                        index: -2
+                                        action: select.tag name.li.0
+                                    -
+                                        name: 点击收货机构
+                                        type: xpath
+                                        content: //div[text()='请选择收货机构']/following-sibling::div//input
+                                        index: -1
+                                        action: click
+                                    -
+                                        name: 选择收货机构
+                                        type: xpath
+                                        content: //div[@class='vue-treeselect__option-arrow-container']
+                                        index: 0
+                                        action: moveToClick
+                                    -
+                                        name: 选择收货机构
+                                        type: xpath
+                                        content: //div[@class='vue-treeselect__list']//label
+                                        index: 1
+                                        action: moveToClick
+                                    -
+                                        name: 收货人电话
+                                        type: xpath
+                                        content: //input[@class='el-input__inner']
+                                        index: 14
+                                        value: pkgpath:utils.util.Util:phone
+                                        action: sendKeys
+                                    -
+                                        name: 点击送货人
+                                        type: xpath
+                                        content: //input[@class='el-input__inner']
+                                        index: 12
+                                        action: click
+                                    -
+                                        name: 选择送货人
+                                        type: xpath
+                                        content: //div[@class='el-select-dropdown el-popper']
+                                        index: -2
+                                        action: select.tag name.li.0
+                                    -
+                                        name: 备注
+                                        type: xpath
+                                        content: //input[@class='el-input__inner']
+                                        index: 9
+                                        value: pkgpath:utils.util.Util:randstr:7
+                                        action: sendKeys
+                                    -
+                                        type: xpath
+                                        content: //a[@class='jump-page-link' and text()='添加货品']
+                                        index: -1
+                                        action: click
+                                    -
+                                        name: 选择货品列表
+                                        type: xpath
+                                        content: //div[@id='dialog-customer-wrapper']//div[@class='el-table__header-wrapper']//label[@class='el-checkbox']
+                                        index: 0
+                                        javascript: setAttribute.role.checkbox
+                                        action: moveToClick
+                                    -
+                                        type: xpath
+                                        content: //button[@class='btn btn-info' and text()='添加']
+                                        index: -1
+                                        action: click
+                                    -
+                                        name: 填写发货量(给列表填写数量)
+                                        type: xpath
+                                        content: ''
+                                        index: -1
+                                        value: pkgpath:utils.util.Util:randinterger:5
+                                        action: sendListKeys
+                                        contents:
+                                            -
+                                                type: xpath
+                                                content: //div[contains(@class, 'el-table__body-wrapper')]
+                                                index: 1
+                                            -
+                                                type: xpath
+                                                content: .//td[contains(@class, 'order_detail_oamount')]//input[@class='el-input__inner']
+                                                index: -2
+                    edit:
+                        key: edit
+                        name: 修改
+                        type: xpath
+                        content: //div[@class='el-table__fixed-body-wrapper']//a[@class='jump-page-link' and text()='修改']
+                        index: -1
+                        action: click
+                        submenu:
+                            save:
+                                key: save
+                                name: 保存
+                                type: xpath
+                                content: //button[@class='btn btn-primary' and text()='保存']
+                                index: -1
+                                action: click
+                                operation:
+                                    -
+                                        name: 选择货品
+                                        type: xpath
+                                        content: ''
+                                        index: 0
+                                        javascript: setAttribute.role.checkbox
+                                        action: moveToClick
+                                        contents:
+                                            -
+                                                type: xpath
+                                                content: //div[@class='tab-pane active']//div[contains(@class, 'el-table__body-wrapper')]
+                                                index: 0
+                                            -
+                                                type: xpath
+                                                content: .//label[@class='el-checkbox']
+                                                index: 0
+                                    -
+                                        name: 删除货品
+                                        type: xpath
+                                        content: //div[@class='tab-pane active']//a[@class='jump-page-link' and text()='删除货品']
+                                        index: -1
+                                        action: click
+                                    -
+                                        name: 确认删除货品
+                                        type: xpath
+                                        content: //button[@class='el-button el-button--default el-button--small el-button--primary ']
+                                        index: -1
+                                        action: click
+                    cancel:
+                        key: cancel
+                        name: 废弃确认
+                        type: xpath
+                        content: //button[@class='el-button el-button--default el-button--small el-button--primary ']
+                        index: -1
+                        action: click
+                        operation:
+                            -
+                                name: 选择单据
+                                type: xpath
+                                content: //div[contains(@class, 'el-table__body-wrapper')]//label[@class='el-checkbox']
+                                index: 0
+                                javascript: setAttribute.role.checkbox
+                                action: moveToClick
+                            -
+                                name: 点击更多
+                                type: xpath
+                                content: //button[@class='btn btn-default el-dropdown-link el-dropdown-selfdefine']
+                                index: -1
+                                action: moveToClick
+                            -
+                                name: 废弃
+                                type: xpath
+                                content: //li[@class='el-dropdown-menu__item' and contains(text(), '废弃')]
+                                index: -1
+                                action: click
+                    audit:
+                        key: audit
+                        name: 审核确认
+                        type: xpath
+                        content: //button[@class='el-button el-button--default el-button--small el-button--primary ']
+                        index: -1
+                        action: click
+                        operation:
+                            -
+                                name: 选择单据
+                                type: xpath
+                                content: //div[contains(@class, 'el-table__body-wrapper')]//label[@class='el-checkbox']
+                                index: 0
+                                javascript: setAttribute.role.checkbox
+                                action: moveToClick
+                            -
+                                name: 审核按钮
+                                type: xpath
+                                content: //button[@class='btn btn-primary' and text()='审核']
+                                index: -1
+                                action: click
+
+TEST:
+    - login
+#    - delivery.deliveryorder.add.save
+#    - delivery.deliveryorder.add.noneordersave
+#    - delivery.deliveryorder.edit.save
+#    - delivery.deliveryorder.cancel
+    - delivery.deliveryorder.audit

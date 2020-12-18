@@ -1,0 +1,18 @@
+WEBSITE:
+    url: http://your.test.url
+
+MENU:
+    login:
+        key: login
+        name: 登录
+        icon:
+        type: xpath
+        content: //button[@class='btn btn-primary' and text()='登录']
+        index: -1
+        action: click
+        operation: [
+            {"type": "tag name", "content": "input", "value": "xxx", "index": 2, "action":"sendKeys"},
+            {"type": "tag name", "content": "input", "value": "xxx", "index": 3, "action":"sendKeys"}]
+
+TEST:
+    - login

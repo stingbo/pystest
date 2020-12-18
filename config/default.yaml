@@ -1,6 +1,6 @@
 BROWSER:
     type: Chrome
-    proxyserver: browsermob-proxy
+    proxyserver: your/browsermob-proxy/path
 
 WEBSITE:
     url: https://www.baidu.com

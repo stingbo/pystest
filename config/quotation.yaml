@@ -1,0 +1,50 @@
+MENU:
+    login:
+        key: login
+        name: 登录
+        icon:
+        type: xpath
+        content: //button[@class='btn btn-primary' and text()='登录']
+        index: -1
+        action: click
+        operation: [
+            {"type": "tag name", "content": "input", "value": "12811881234", "index": 2, "action":"sendKeys"},
+            {"type": "tag name", "content": "input", "value": "123456", "index": 3, "action":"sendKeys"}]
+    base_info:
+        key: base_info
+        name: 基础档案
+        icon: menu-icon-4
+        type: xpath
+        content: "//span[@style='padding-left: 18px;' and text()='销售价格']/../../.."
+        index: 0
+        action: open
+        open:
+            class: is-opened
+        submenu:
+            quotation:
+                key: quotation
+                name: 报价单
+                type: xpath
+                content: //span[text()='报价']/..
+                index: -1
+                action: click
+                submenu:
+                    add:
+                        key: add
+                        name: 常规报价
+                        type: xpath
+                        content: //a[text()='常规报价']
+                        index: -1
+                        action: click
+                        operation:
+                            -
+                                name: 添加
+                                type: xpth
+                                content: //button[@class='btn btn-default dropdown-toggle']
+                                index: -1
+                                action: moveToClick
+
+
+TEST:
+    - login
+    - base_info.quotation.add
