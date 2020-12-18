@@ -1,0 +1,32 @@
+MENU:
+    system_setting:
+        key: system_setting
+        name: 系统设置
+        icon: menu-icon-111
+        type: xpath
+        content: "//span[@style='padding-left: 18px;' and text()='系统设置']/../../.."
+        index: 0
+        action: open
+        open:
+            class: is-opened
+        submenu:
+            subsystem_setting:
+                key: subsystem_setting
+                name: 系统设置
+                type: xpath
+                content: "//span[@style='padding-left: 18px;' and text()='系统设置']/.."
+                index: -1
+                action: click
+                submenu:
+                    save:
+                        key: save
+                        name: 保存
+                        type: xpath
+                        content: //button[@class='btn btn-primary' and text()='保存']
+                        index: -1
+                        action: click
+                        operation: [{"type": "class name", "content": "el-radio__inner", "value": "", "index": 0, "action":"click"}]
+
+TEST:
+    - login
+    - system_setting.subsystem_setting.save

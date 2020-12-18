@@ -1,0 +1,116 @@
+#!/usr/bin/env bash
+
+# 使用git hook pre-commit 检验代码语法与规范
+RETVAL=0
+FORMATVAL=0
+SYNTAXVAL=0
+
+EXECUTABLE_NAME=yapf
+CONFIG_FILE_PARAMETER='-i'
+ROOT=`pwd`
+
+locations=(
+  $ROOT/bin/$EXECUTABLE_NAME
+  $ROOT/vendor/bin/$EXECUTABLE_NAME
+  `which $EXECUTABLE_NAME`
+)
+
+for location in ${locations[*]}
+do
+  if [[ -x $location ]]; then
+    YAPF=$location
+    break
+  fi
+done
+
+if [[ ! -x $YAPF ]]; then
+  echo "executable $EXECUTABLE_NAME not found, exiting..."
+  echo "if you're sure this is incorrect, make sure they're executable (chmod +x)"
+  exit
+fi
+
+echo "using \"$EXECUTABLE_NAME\" located at $YAPF"
+$YAPF --version
+
+if [ -z $BIN_DIR ];then
+    BIN_DIR=/usr/local/bin
+fi
+
+if [ -z $YAPF ];then
+    YAPF=$BIN_DIR/$EXECUTABLE_NAME
+fi
+
+if [ -z $SYNTAX_FILE_FILTER ];then
+    SYNTAX_FILE_FILTER='grep -v do_not_match_any_file'
+fi
+
+function echo_and_space
+{
+    echo -n "    $1"
+    strlen=`echo -n $1 | wc -c`
+    let spacenu=100-strlen 
+    for ((i=1;i<=$spacenu;i++));do echo -n ' ';done
+}
+
+function rollback_install
+{
+    rm -f $YAPF
+    exit
+}
+
+if [ ! -x "$YAPF" ]; then 
+    mkdir -p $BIN_DIR
+    echo -e "\n\033[32m 初次执行安装 yapf 中... \033[0m"
+    trap rollback_install SIGINT SIGTERM
+    pip install yapf
+    echo ''
+fi 
+
+while read -r file;
+do
+  file=${file:1}
+  FILERET=0
+  if [[ $file = *.py ]];
+  then    
+      echo "Checking File:"
+      echo $file
+      #echo_and_space $file
+      #echo -e "\n";
+
+      if echo $file | $SYNTAX_FILE_FILTER > /dev/null
+      then
+          #if pyflakes $file > /dev/null 2>&1;
+          if pyflakes $file;
+          then
+              echo -en "Syntax Check: \033[32m true \033[0m\n"
+          else
+              echo -en "Syntax Check: \033[31m false \033[0m;\n"
+              RETVAL=1
+              FILERET=1
+              SYNTAXVAL=1
+          fi
+      else
+          echo -en "\033[32m skip   \033[0m"
+      fi
+
+      if [ "$FILERET" -eq "1" ] || $YAPF -d $file | grep '(reformatted)' > /dev/null 2>&1;
+      then
+          echo -en "Coding Standards Check: \033[31m false \033[0m"
+          RETVAL=1
+          FILERET=1
+          FORMATVAL=1
+      else
+          echo -en "Coding Standards Check: \033[32m true \033[0m"
+      fi
+
+      #echo ''
+      echo -e "\n";
+  fi
+done < <(git diff --cached --name-status --diff-filter=ACM)
+
+if [ "$FORMATVAL" -eq "1" ];
+then
+    echo -e "\n\033[32m 使用 $YAPF $CONFIG_FILE_PARAMETER [<path>] 来格式化未通过编码规范检查的代码\033[0m"
+fi
+
+exit $RETVAL

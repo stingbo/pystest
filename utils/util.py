@@ -3,33 +3,61 @@ import json
 import random
 import string
 
-class Util:
-    def randstr(self, len = 5):
-        len = int(len)
-        return ''.join(random.sample(string.ascii_letters + string.digits, len))
 
+class Util:
+    #随机字母字符串
+    def randstr(self, params):
+        len = int(params[0])
+        return ''.join(random.sample(string.ascii_letters + string.digits,
+                                     len))
+
+    # 随机email
+    def email(self):
+        params = [8]
+        str = self.randstr(params)
+        return str + '@test.com'
+
+    # 随机手机号
     def phone(self):
         first = 1
-        second = random.choice([3,4,5,6,7,8,9])
+        second = random.choice([3, 4, 5, 6, 7, 8, 9])
         third = {
-            3:random.randint(0,9),
-            4:random.choice([5,7]),
-            5:random.choice([0,1,2,3,5,6,7,8,9]),
-            6:random.randint(0,9),
-            7:random.choice([6,7,8]),
-            8:random.randint(0,9),
-            9:random.randint(0,9),
+            3: random.randint(0, 9),
+            4: random.choice([5, 7]),
+            5: random.choice([0, 1, 2, 3, 5, 6, 7, 8, 9]),
+            6: random.randint(0, 9),
+            7: random.choice([6, 7, 8]),
+            8: random.randint(0, 9),
+            9: random.randint(0, 9),
         }[second]
         behind = ''
         for i in range(8):
-            behind = behind + str(random.randint(0,9))
+            behind = behind + str(random.randint(0, 9))
 
         phone = str(first) + str(second) + str(third) + behind
 
         return phone
 
-    def randinterger(self, max = 9999):
-        return random.randint(1, int(max))
+    # 生成随机整数
+    def randinterger(self, params):
+        max = int(params[0])
+        return random.randint(1, max)
+
+    # 生成随机中文字符串
+    def randGBK2312(self, params):
+        len = int(params[0])
+        i = 1
+        if len < i:
+            len = i
+        str = ''
+        while i <= len:
+            head = random.randint(0xb0, 0xf7)
+            body = random.randint(0xa1, 0xfe)
+            val = f'{head:x} {body:x}'
+            str = str + bytes.fromhex(val).decode('gb2312')
+            i += 1
+
+        return str
 
     # 递归合并两个dict
     def recursionMergeTwoDict(x, y):

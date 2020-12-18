@@ -1,5 +1,6 @@
 # coding = utf-8
 
+
 class Menu:
     def getMenu(config, key):
         data = []
@@ -8,7 +9,7 @@ class Menu:
 
         return Menu.getMenuPath(menus, keys, data)
 
-    def getMenuPath(menus, keys, data = [], parent_key = ''):
+    def getMenuPath(menus, keys, data=[], parent_key=''):
         for menu in menus:
             if menu.get('key') in keys:
                 if parent_key:
@@ -17,7 +18,8 @@ class Menu:
                     menu['full_key'] = menu.get('key')
                 data.append(menu)
                 if 'submenu' in menu.keys():
-                    Menu.getMenuPath(menu.get('submenu'), keys, data, menu['full_key'])
+                    Menu.getMenuPath(menu.get('submenu'), keys, data,
+                                     menu['full_key'])
 
         return data
 

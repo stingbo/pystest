@@ -1,3 +1,14 @@
 config.yaml
 __pycache__
 __pycache__/*
+.idea/
+_ide_helper.php
+.phpstorm.meta.php
+_ide_helper_models.php
+*.log
+!logs/*
+venv/
+.ropeproject
+server.log
+bmp.log
+geckodriver.log

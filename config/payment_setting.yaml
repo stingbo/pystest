@@ -1,0 +1,125 @@
+MENU:
+    system_setting:
+        key: system_setting
+        name: 系统设置
+        icon: menu-icon-111
+        type: xpath
+        content: "//span[@style='padding-left: 18px;' and text()='系统设置']/../../.."
+        index: 0
+        action: open
+        open:
+            class: is-opened
+        submenu:
+            payment:
+                key: payment
+                name: 第三方支付
+                type: xpath
+                content: //span[text()='第三方支付']/..
+                index: -1
+                action: click
+                submenu:
+                    add:
+                        key: add
+                        name: 添加
+                        type: xpath
+                        content: //button[@class='btn btn-primary' and text()='添加']
+                        index: -1
+                        action: click
+                        submenu:
+                            save:
+                                key: save
+                                name: 保存
+                                type: xpath
+                                content: //button[@class='btn btn-info' and text()='保 存']
+                                index: -1
+                                action: click
+                                operation:
+                                    -
+                                        type: xpath
+                                        content: //div[@class='el-input el-input--suffix']/..
+                                        index: -1
+                                        action: click
+                                    -
+                                        type: xpath
+                                        content: //li[@class='el-select-dropdown__item']/..
+                                        index: 1
+                                        action: click
+                                    -
+                                        type: xpath
+                                        content: //input[@class='form-control']
+                                        index: 0
+                                        value: pkgpath:utils.util.Util:randstr:6
+                                        action: sendKeys
+                                    -
+                                        type: xpath
+                                        content: //input[@class='form-control']
+                                        index: 1
+                                        value: pkgpath:utils.util.Util:randstr:7
+                                        action: sendKeys
+                                    -
+                                        type: xpath
+                                        content: //input[@class='form-control']
+                                        index: 2
+                                        value: pkgpath:utils.util.Util:randstr:7
+                                        action: sendKeys
+                                    -
+                                        type: xpath
+                                        content: //input[@class='form-control']
+                                        index: 3
+                                        value: pkgpath:utils.util.Util:randstr:7
+                                        action: sendKeys
+                                    -
+                                        type: xpath
+                                        content: //input[@class='form-control']
+                                        index: 4
+                                        value: pkgpath:utils.util.Util:randstr:7
+                                        action: sendKeys
+                    edit:
+                        key: edit
+                        name: 编辑
+                        type: xpath
+                        content: //td[@class='el-table_1_column_7 is-center ']/div/a[@class='jump-page-link']
+                        index: -1
+                        action: click
+                        submenu:
+                            save:
+                                key: save
+                                name: 保存
+                                type: xpath
+                                content: //button[@class='btn btn-info' and text()='保 存']
+                                index: -1
+                                action: click
+                                operation:
+                                    -
+                                        type: xpath
+                                        content: //input[@class='form-control']
+                                        index: 0
+                                        value: pkgpath:utils.util.Util:randstr:6
+                                        action: modifyKeys
+                                    -
+                                        type: xpath
+                                        content: //input[@class='form-control']
+                                        index: 1
+                                        value: pkgpath:utils.util.Util:randstr:7
+                                        action: modifyKeys
+                    delete:
+                        key: delete
+                        name: 删除
+                        type: xpath
+                        content: //td[@class='el-table_1_column_7 is-center ']/div/a[@class='jump-page-link']
+                        index: 1
+                        action: click
+                        submenu:
+                            confirm:
+                                key: confirm
+                                name: 确定
+                                type: xpath
+                                content: //button[@class='el-button el-button--default el-button--small el-button--primary ']
+                                index: -1
+                                action: click
+
+TEST:
+    - login
+    - system_setting.payment.add.save
+    - system_setting.payment.edit.save
+    - system_setting.payment.delete.confirm
