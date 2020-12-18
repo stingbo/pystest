@@ -48,12 +48,12 @@
 
     > iframe: 字符串，iframe的id或者name，配置后会运行切换到iframe操作
 
-    > wait 对象，等待加载的元素，含有type与content（含义同上），比如等待某元素出现
+    > wait: 对象，等待加载的元素，含有type与content（含义同上），比如等待某元素出现
 
-    > wait_disappear 对象，等待消失的元素，含有type与content（含义同上），比如等待遮罩层的消失
+    > wait_disappear: 对象，等待消失的元素，含有type与content（含义同上），比如等待遮罩层的消失
     
 #### 总结
 
 * _使用contents多次获取元素时，在上一次范围内获取元素，使用 .//(点+双斜线)_
 * _使用class匹配时，如果class里有空格，配置xpath时也需要含有，或者使用contains_ 
-* 使用安全基本都能在config目录下里的文件找到，祝使用愉快，如果有问题，欢迎提issue
+* _使用示例基本都能在config目录下里的文件找到，祝使用愉快，如果有问题，欢迎提issue_
