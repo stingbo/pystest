@@ -10,6 +10,7 @@ from selenium.webdriver.common.action_chains import ActionChains
 from utils.ParametrizedTestCase import ParametrizedTestCase
 from utils.http import Http
 from utils.element import Element
+from utils.javascript import Javascript
 from utils.wait import WaitDisappear
 from selenium.webdriver.support import expected_conditions as EC
 from selenium.webdriver.support.ui import WebDriverWait  # 等待页面加载某些元素
@@ -65,13 +66,9 @@ class Action(ParametrizedTestCase):
 
             if 'operation' in menu.keys():
                 for op in menu.get('operation'):
-                    self.operation(op.get('type'), op.get('content'),
-                                   op.get('value'), op.get('index'),
-                                   op.get('action'), op)
+                    self.operation(op)
 
-            self.operation(menu.get('type'), menu.get('content'),
-                           menu.get('value'), menu.get('index'),
-                           menu.get('action'), menu)
+            self.operation(menu)
 
             # http请求监听
             if proxy and 'listener' in menu.keys():
@@ -104,9 +101,7 @@ class Action(ParametrizedTestCase):
             if 'after_operation' in menu.keys():
                 for op in menu.get('after_operation'):
                     try:
-                        self.operation(op.get('type'), op.get('content'),
-                                       op.get('value'), op.get('index'),
-                                       op.get('action'))
+                        self.operation(op)
                         sleep(1)
                     except NoSuchElementException:
                         # 后置操作，找不到元素不做处理
@@ -117,14 +112,30 @@ class Action(ParametrizedTestCase):
                 raise AssertExcetion
 
     # 操作
-    def operation(self, type, content, value, index=-1, action='', config={}):
-        sleep(1)
+    def operation(self, config):
+        if 'wait_time' in config.keys() and (
+                isinstance(config.get('wait_time'), int) or
+            (isinstance(config.get('wait_time'),
+                        float))) and config.get('wait_time') > 0:
+            sleep(config.get('wait_time'))
+        else:
+            sleep(1)
+
+        if 'content' not in config.keys(
+        ) or not config.get('content') or config.get('content') == 'none':
+            return
+
+        type = config.get('type')
+        content = config.get('content')
+        index = config.get('index')
+        value = config.get('value')
+        action = config.get('action')
         element = self.el.get(type, content, index, config)
         if 'javascript' in config.keys():
-            javascript = config.get('javascript')
-            self.exjavascript(element, javascript)
+            jscode = config.get('javascript')
+            js = Javascript(self.browser, element)
+            js.exjavascript(jscode)
 
-        # 打开操作，是click的一种，但是会判断是否已经打开过
         if action == 'open':
             self.open(element, config)
         elif action == 'click':
@@ -149,7 +160,7 @@ class Action(ParametrizedTestCase):
             # print('无操作'+action)
             pass
 
-    # 点击操作
+    # 打开操作，是click的一种，但是会判断是否已经打开过
     def open(self, element, config):
         if config.get('open').get('class') not in element.get_attribute(
                 "class"):
@@ -227,24 +238,6 @@ class Action(ParametrizedTestCase):
             if is_show:
                 element.find_elements(self.el.getType(params[1]),
                                       params[2])[int(params[3])].click()
-
-    # 给元素执行javascript代码
-    def exjavascript(self, element, javascript):
-        if isinstance(element, list):
-            for el in element:
-                self.exjs(el, javascript)
-        else:
-            self.exjs(element, javascript)
-
-    # 给元素执行javascript代码
-    def exjs(self, element, javascript):
-        params = javascript.split('.')
-        if params[0] == 'setAttribute':
-            self.browser.execute_script(
-                "arguments[0].setAttribute(arguments[1], arguments[2])",
-                element, params[1], params[2])
-        else:
-            self.browser.execute_script(javascript, element)
 
     # 导入包
     def myImport(self, pkgpath):
