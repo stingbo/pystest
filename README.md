@@ -4,6 +4,7 @@
 
 - 复制并修改配置，```cp config.example.yaml config.yaml```，此文件为全局配置，config目录下文件可覆盖此配置文件
 - 使用：```python test.py config目录下的文件名```，如`python3 test.py default`
+- 测试用例采用YAML通过格式编写，详见[YAML示例](#YAML示例)
 
 ### 依赖
 
@@ -36,7 +37,7 @@
 
     > 7. 根据action执行动作
 
-* config目录下配置文件，格式说明：  
+* config目录下配置文件，`MENU`项格式说明：  
 
     > key: 字符串，菜单路径
     
@@ -74,6 +75,49 @@
     > wait_disappear: 对象，等待消失的元素，含有type与content（含义同上），比如等待遮罩层的消失
 
     > wait_time: 数字，指定某个动作固定等待的时间，单位秒
+    
+#### YAML示例
+```
+BROWSER:
+    #浏览器类型
+    type: Chrome/Firefox
+    #bmp程序路径
+    proxyserver: your/browsermob-proxy/path
+    #是否开启代理，开启后，配置listener的操作，会记录请求日志到logs目录下
+    proxy: True/False
+
+WEBSITE:
+    #启动页地址
+    url: http://www.your_website_url.com
+
+MENU:
+    login:
+        key: login
+        name: 登录
+        type: xpath
+        content: //button[@class='btn btn-primary' and text()='登录']
+        index: -1
+        action: click
+        listener:
+            -
+                url: login/url
+                code: 0
+        operation:
+            -
+                name: 用户名
+                type: tag name
+                content: input
+                value: xxxxx
+                index: 2
+                action: sendKeys
+            -
+                name: 密码
+                type: tag name
+                content: input
+                value: xxxxx
+                index: 3
+                action: sendKeys
+```
     
 #### 总结
 
