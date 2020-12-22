@@ -1,5 +1,4 @@
 # coding = utf-8
-import os
 from selenium.webdriver.common.by import By
 from selenium.common.exceptions import NoSuchElementException
 
@@ -27,7 +26,6 @@ class Element:
                         print(msg + ',元素不存在')
                     except IndexError:
                         print(msg + ',元素不存在或超出list限制')
-                        os._exit(0)
                 elif index == -2:
                     return element.find_elements(self.getType(type), content)
                 else:
@@ -42,7 +40,6 @@ class Element:
                         print(msg + ',元素不存在')
                     except IndexError:
                         print(msg + ',元素不存在或超出list限制')
-                        os._exit(0)
                 elif index == -2:
                     return self.browser.find_elements(self.getType(type),
                                                       content)

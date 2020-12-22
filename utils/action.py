@@ -58,10 +58,11 @@ class Action(ParametrizedTestCase):
 
             # http请求监听
             if proxy and 'listener' in menu.keys():
-                proxy.new_har("req",
+                proxy.new_har("test",
                               options={
                                   'captureHeaders': True,
-                                  'captureContent': True
+                                  'captureContent': True,
+                                  'captureBinaryContent': True
                               })
 
             if 'operation' in menu.keys():
@@ -72,6 +73,7 @@ class Action(ParametrizedTestCase):
 
             # http请求监听
             if proxy and 'listener' in menu.keys():
+                proxy.wait_for_traffic_to_stop(1, 1000)
                 http = Http()
                 http.listener(proxy.har, menu.get('listener'))
 
@@ -114,15 +116,19 @@ class Action(ParametrizedTestCase):
     # 操作
     def operation(self, config):
         if 'wait_time' in config.keys() and (
-                isinstance(config.get('wait_time'), int) or
-            (isinstance(config.get('wait_time'),
-                        float))) and config.get('wait_time') > 0:
+                isinstance(config.get('wait_time'), int)
+                or isinstance(config.get('wait_time'),
+                              float)) and config.get('wait_time') > 0:
             sleep(config.get('wait_time'))
         else:
             sleep(1)
 
-        if 'content' not in config.keys(
-        ) or not config.get('content') or config.get('content') == 'none':
+        # content与contents都不存在，则后续流程不执行
+        if ('content' not in config.keys() or not config.get('content')
+                or config.get('content')
+                == 'none') and ('contents' not in config.keys()
+                                or not config.get('contents')
+                                or config.get('contents') == 'none'):
             return
 
         type = config.get('type')
@@ -132,9 +138,9 @@ class Action(ParametrizedTestCase):
         action = config.get('action')
         element = self.el.get(type, content, index, config)
         if 'javascript' in config.keys():
-            jscode = config.get('javascript')
+            js_code = config.get('javascript')
             js = Javascript(self.browser, element)
-            js.exjavascript(jscode)
+            js.exjavascript(js_code)
 
         if action == 'open':
             self.open(element, config)
