@@ -82,7 +82,7 @@ BROWSER:
     #浏览器类型
     type: Chrome/Firefox
     #bmp程序路径
-    proxyserver: your/browsermob-proxy/path
+    bmp_path: your/browsermob-proxy/path
     #是否开启代理，开启后，配置listener的操作，会记录请求日志到logs目录下
     proxy: True/False
 
