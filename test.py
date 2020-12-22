@@ -11,6 +11,7 @@ from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from exceptions.assertExcetion import AssertExcetion
 from utils.action import Action
+from utils.http import Http
 from utils.util import Util
 from utils.menu import Menu
 from utils.ParametrizedTestCase import ParametrizedTestCase
@@ -18,10 +19,11 @@ from HTMLTestRunner import HTMLTestRunner
 
 
 def main():
+    global proxy_client, proxy_server
     LOG_FORMAT = "%(asctime)s - %(levelname)s - %(message)s"
-    logfilename = 'logs/test_' + time.strftime("%Y%m%d",
-                                               time.localtime()) + '.log'
-    logging.basicConfig(filename=logfilename,
+    log_filename = 'logs/test_' + time.strftime("%Y%m%d",
+                                                time.localtime()) + '.log'
+    logging.basicConfig(filename=log_filename,
                         level=logging.INFO,
                         format=LOG_FORMAT)
 
@@ -37,11 +39,11 @@ def main():
 
     # 是否传入配置文件
     if len(sys.argv) > 1:
-        testfilename = sys.argv[1]
-        config_file = "/config/" + testfilename + ".yaml"
+        test_filename = sys.argv[1]
+        config_file = "/config/" + test_filename + ".yaml"
     else:
-        testfilename = 'default'
-        config_file = "/config/" + testfilename + '.yaml'
+        test_filename = 'default'
+        config_file = "/config/" + test_filename + '.yaml'
 
     # yaml配置文件是否存在
     config_file_path = curpath + config_file
@@ -55,20 +57,43 @@ def main():
     # 合并配置
     config = Util.recursionMergeTwoDict(global_config, config)
 
+    # 是否开启代理
+    is_open_proxy = config.get('BROWSER').get('proxy')
+    if is_open_proxy:
+        from browsermobproxy import Server
+        bmp_path = config.get('BROWSER').get('bmp_path')
+        logging.info('开启代理 ' + bmp_path)
+        proxy_server = Server(bmp_path)
+        proxy_server.start()
+        proxy_client = proxy_server.create_proxy()
+
     browser_type = config.get('BROWSER').get('type')
     if browser_type == 'Firefox':
         options = FirefoxOptions()
         options.page_load_strategy = 'normal'
+        if is_open_proxy:
+            options.add_argument('--proxy-server={0}'.format(
+                proxy_client.proxy))
         browser = webdriver.Firefox(options=options)
     elif browser_type == 'Chrome':
         options = ChromeOptions()
         options.page_load_strategy = 'normal'
+        if is_open_proxy:
+            options.add_argument('--proxy-server={0}'.format(
+                proxy_client.proxy))
         browser = webdriver.Chrome(options=options)
     else:
         print('浏览器' + browser_type + ':类型不支持')
-        os._exit(0)
+        return False
 
     logging.info('开始使用 ' + browser_type + ' 浏览器进行自动化测试')
+
+    if is_open_proxy:
+        proxy_client.new_har("req",
+                             options={
+                                 'captureHeaders': True,
+                                 'captureContent': True
+                             })
 
     browser.maximize_window()
     # 浏览器等待时间
@@ -76,6 +101,8 @@ def main():
 
     url = config.get('WEBSITE').get('url')
     browser.get(url)
+    if is_open_proxy:
+        Http.logHar(proxy_client.har)
 
     # 执行配置的TEST对象
     test = config.get('TEST')
@@ -83,17 +110,20 @@ def main():
     for key in test:
         menus = Menu.getMenuConfig(config, key)
         try:
-            testData = [browser, menus]
+            if is_open_proxy:
+                test_data = [browser, menus, proxy_client]
+            else:
+                test_data = [browser, menus]
             suite.addTest(
                 ParametrizedTestCase.parametrize(Action,
                                                  'test_menu',
-                                                 param=testData))
+                                                 param=test_data))
         except AssertExcetion:
             print(key + " 断言失败")
 
-    reportfilename = 'reports/' + testfilename + "_" + time.strftime(
+    report_file_name = 'reports/' + test_filename + "_" + time.strftime(
         "%Y%m%d", time.localtime()) + '.html'
-    fp = open(reportfilename, 'w', encoding='utf-8')
+    fp = open(report_file_name, 'w', encoding='utf-8')
     runner = HTMLTestRunner.HTMLTestRunner(stream=fp,
                                            title='你的测试报告',
                                            description='使用配置文件:' +
@@ -103,6 +133,10 @@ def main():
 
     sleep(5)
     browser.quit()
+
+    if is_open_proxy:
+        proxy_client.close()
+        proxy_server.stop()
 
 
 if __name__ == "__main__":
