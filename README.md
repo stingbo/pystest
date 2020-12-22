@@ -77,7 +77,7 @@
     > wait_time: 数字，指定某个动作固定等待的时间，单位秒
     
 #### YAML示例
-```
+```yaml
 BROWSER:
     #浏览器类型
     type: Chrome/Firefox
@@ -123,4 +123,5 @@ MENU:
 
 * _使用contents多次获取元素时，在上一次范围内获取元素，使用 .//(点+双斜线)_
 * _使用class匹配时，如果class里有空格，配置xpath时也需要含有，或者使用contains_ 
+* _项目里pre-commit.sample文件为git hook，用于python代码语法与格式检测_
 * _使用示例基本都能在config目录下里的文件找到，祝使用愉快，如果有问题，欢迎提issue_
