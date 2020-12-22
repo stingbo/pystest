@@ -68,7 +68,7 @@
     
     > listener: 数组，所需要监听的api url与返回的code，使用listener必须安装BrowserMob Proxy，并配置正确应用路径
 
-    > iframe: 字符串，iframe的id或者name，配置后会运行切换到iframe操作
+    > iframe: 字符串，iframe的id或者name，配置后会运行切换到对应iframe层操作，如果配置为空，则会保持在当前iframe层或者说时不做切换操作，如果没有配置，则会回到最外层
 
     > wait: 对象，等待加载的元素，含有type与content（含义同上），比如等待某元素出现
 

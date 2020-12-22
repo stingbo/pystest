@@ -43,7 +43,11 @@ class Action(ParametrizedTestCase):
 
             # 切换iframe
             if 'iframe' in menu.keys():
-                self.browser.switch_to.frame(menu.get('iframe'))
+                iframe = menu.get('iframe', '')
+                if iframe and iframe != 'none':
+                    self.browser.switch_to.frame(menu.get('iframe'))
+                else:
+                    pass
             else:
                 self.browser.switch_to.default_content()
 
