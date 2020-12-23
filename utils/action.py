@@ -1,19 +1,16 @@
 # coding = utf-8
-# import os
 import time
-from operator import methodcaller
 from selenium.common.exceptions import NoSuchElementException
-from time import sleep
-from selenium.webdriver.common.keys import Keys
 from exceptions.assertExcetion import AssertExcetion
-from selenium.webdriver.common.action_chains import ActionChains
-from utils.ParametrizedTestCase import ParametrizedTestCase
-from utils.http import Http
-from utils.element import Element
-from utils.javascript import Javascript
-from utils.wait import WaitDisappear
 from selenium.webdriver.support import expected_conditions as EC
-from selenium.webdriver.support.ui import WebDriverWait  # 等待页面加载某些元素
+from selenium.webdriver.support.ui import WebDriverWait
+from time import sleep
+from utils.element import Element
+from utils.http import Http
+from utils.javascript import Javascript
+from utils.operation import Operation
+from utils.parametrized_test_case import ParametrizedTestCase
+from utils.wait import WaitDisappear
 
 
 class Action(ParametrizedTestCase):
@@ -42,22 +39,20 @@ class Action(ParametrizedTestCase):
                 wait.until(my_wait)
 
             # 切换iframe
-            if 'iframe' in menu.keys():
-                iframe = menu.get('iframe', '')
-                if iframe and iframe != 'none':
-                    self.browser.switch_to.frame(menu.get('iframe'))
-                else:
-                    pass
-            else:
+            if 'iframe' not in menu.keys():
                 self.browser.switch_to.default_content()
+            elif 'iframe' in menu.keys() and menu.get('iframe') != 'none':
+                self.browser.switch_to.frame(menu.get('iframe'))
+            else:
+                pass
 
             # 是否等待页面加载
             if 'wait' in menu.keys():
                 wait = WebDriverWait(self.browser, 10, poll_frequency=1)
                 locator = (menu.get('wait').get('type'),
                            menu.get('wait').get('content'))
-                # wait.until(EC.presence_of_element_located(locator))
-                wait.until(EC.element_to_be_clickable(locator))
+                wait.until(EC.presence_of_element_located(locator))
+                # wait.until(EC.element_to_be_clickable(locator))
                 # wait.until(EC.visibility_of_element_located(locator))
 
             # http请求监听
@@ -138,122 +133,15 @@ class Action(ParametrizedTestCase):
         type = config.get('type')
         content = config.get('content')
         index = config.get('index')
-        value = config.get('value')
-        action = config.get('action')
+        # 查找元素
         element = self.el.get(type, content, index, config)
+
+        # 执行js
         if 'javascript' in config.keys():
             js_code = config.get('javascript')
             js = Javascript(self.browser, element)
             js.exjavascript(js_code)
 
-        if action == 'open':
-            self.open(element, config)
-        elif action == 'click':
-            self.click(element)
-        elif action == 'clickList':
-            self.clickList(element)
-        elif action == 'moveToClick':
-            self.moveToClick(element)
-        elif action == 'jsclick':
-            self.jsclick(element)
-        elif action == 'sendKeys':
-            self.sendKeys(element, value)
-        elif action == 'modifyKeys':
-            self.sendKeys(element, value, True)
-        elif action == 'sendListKeys':
-            self.sendListKeys(element, value, True)
-        elif action == 'upload':
-            self.upload(element, value)
-        elif 'select' in action:
-            self.select(element, action)
-        else:
-            # print('无操作'+action)
-            pass
-
-    # 打开操作，是click的一种，但是会判断是否已经打开过
-    def open(self, element, config):
-        if config.get('open').get('class') not in element.get_attribute(
-                "class"):
-            self.click(element)
-
-    # 点击操作
-    def click(self, element):
-        element.click()
-
-    # js点击操作
-    def jsclick(self, element):
-        self.browser.execute_script('arguments[0].click()', element)
-
-    # 给列表填写值
-    def clickList(self, elements):
-        for element in elements:
-            element.click()
-
-    # 移动并点击操作
-    def moveToClick(self, element):
-        ActionChains(self.browser).move_to_element(element).click().perform()
-
-    # 默认填写值
-    def sendKeys(self, element, value, modify=False):
-        self.writeKey(element, value, modify)
-
-    # 给列表填写值
-    def sendListKeys(self, elements, value, modify=False):
-        for element in elements:
-            self.writeKey(element, value, modify)
-
-    # 上传文件
-    def upload(self, element, value):
-        # filepath = os.getcwd() + value
-        # print(filepath)
-        # self.writeKey(element, filepath)
-        self.writeKey(element, value)
-
-    # 写值到元素里
-    def writeKey(self, element, value, modify=False):
-        if 'pkgpath' in value:
-            callbacks = value.split(':')
-            pkg = callbacks[1]
-            func = callbacks[2]
-
-            try:
-                param = callbacks[3]
-                if ',' in param:
-                    params = param.split(',')
-                else:
-                    params = [param]
-            except IndexError:
-                params = []
-
-            klass = self.myImport(pkg)
-            if params:
-                value = methodcaller(func, params)(klass())
-            else:
-                value = methodcaller(func)(klass())
-
-        # 清空旧值
-        if modify:
-            element.send_keys(Keys.CONTROL, "a")
-            element.send_keys(Keys.DELETE)
-            # element.clear()
-            sleep(0.5)
-
-        element.send_keys(value)
-
-    # 选择元素
-    def select(self, elements, action):
-        params = action.split('.')
-        for element in elements:
-            is_show = element.is_displayed()
-            if is_show:
-                element.find_elements(self.el.getType(params[1]),
-                                      params[2])[int(params[3])].click()
-
-    # 导入包
-    def myImport(self, pkgpath):
-        components = pkgpath.split('.')
-        mod = __import__(components[0] + '.' + components[1],
-                         fromlist=[components[2]])
-        klass = getattr(mod, components[2])
-
-        return klass
+        # 执行具体动作
+        op = Operation(self.browser, element)
+        op.operation(config)

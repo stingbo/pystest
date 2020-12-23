@@ -1,20 +1,20 @@
 # coding = utf-8
 import logging
-import yaml
 import os
 import sys
 import time
 import unittest
+import yaml
+from exceptions.assertExcetion import AssertExcetion
 from time import sleep
 from selenium import webdriver
 from selenium.webdriver.chrome.options import Options as ChromeOptions
 from selenium.webdriver.firefox.options import Options as FirefoxOptions
-from exceptions.assertExcetion import AssertExcetion
 from utils.action import Action
 from utils.http import Http
-from utils.util import Util
 from utils.menu import Menu
-from utils.ParametrizedTestCase import ParametrizedTestCase
+from utils.parametrized_test_case import ParametrizedTestCase
+from utils.util import Util
 from HTMLTestRunner import HTMLTestRunner
 
 
@@ -107,8 +107,9 @@ def main():
     # 执行配置的TEST对象
     test = config.get('TEST')
     suite = unittest.TestSuite()
+    m = Menu()
     for key in test:
-        menus = Menu.getMenuConfig(config, key)
+        menus = m.getMenuConfig(config, key)
         try:
             if is_open_proxy:
                 test_data = [browser, menus, proxy_client]
