@@ -68,9 +68,15 @@ def main():
         proxy_client = proxy_server.create_proxy()
 
     browser_type = config.get('BROWSER').get('type')
+    h5 = config.get('BROWSER').get('h5', False)
+    device_name = config.get('BROWSER').get('device_name', 'iPhone 7')
     if browser_type == 'Firefox':
         options = FirefoxOptions()
         options.page_load_strategy = 'normal'
+        if h5:
+            user_agent = "Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_0 like Mac OS X; en-us) AppleWebKit/528.18 (KHTML, like Gecko) Version/4.0 Mobile/7A341 Safari/528.16"
+            options.set_preference("general.useragent.override", user_agent)
+
         if is_open_proxy:
             options.add_argument('--proxy-server={0}'.format(
                 proxy_client.proxy))
@@ -78,6 +84,10 @@ def main():
     elif browser_type == 'Chrome':
         options = ChromeOptions()
         options.page_load_strategy = 'normal'
+        if h5:
+            mobileEmulation = {'deviceName': device_name}
+            options.add_experimental_option('mobileEmulation', mobileEmulation)
+
         if is_open_proxy:
             options.add_argument('--proxy-server={0}'.format(
                 proxy_client.proxy))
@@ -95,7 +105,10 @@ def main():
                                  'captureContent': True
                              })
 
-    browser.maximize_window()
+    if browser_type == 'Firefox' and h5:
+        browser.set_window_size(360, 640)
+    else:
+        browser.maximize_window()
     # 浏览器等待时间
     # browser.implicitly_wait(10)
 
@@ -122,13 +135,15 @@ def main():
         except AssertExcetion:
             print(key + " 断言失败")
 
-    report_file_name = 'reports/' + test_filename + "_" + time.strftime(
+    report_path = curpath + '/reports/'
+    report_file = test_filename + "_" + time.strftime(
         "%Y%m%d", time.localtime()) + '.html'
-    fp = open(report_file_name, 'w', encoding='utf-8')
+    fp = open(report_path + report_file, 'w', encoding='utf-8')
+    report_title = '你的测试报告'
+    report_desc = '使用配置文件:' + config_file_path + '生成的测试报告'
     runner = HTMLTestRunner.HTMLTestRunner(stream=fp,
-                                           title='你的测试报告',
-                                           description='使用配置文件:' +
-                                           config_file_path + '生成的测试报告')
+                                           title=report_title,
+                                           description=report_desc)
     runner.run(suite)
     fp.close()
 
