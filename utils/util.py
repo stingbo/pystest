@@ -61,18 +61,32 @@ class Util:
 
     # 递归合并两个dict
     def recursionMergeTwoDict(x, y):
-        # type: (dict, dict) -> dict
         z = dict()
         for key in x.keys():
             if key in y.keys():
                 # 合并同类项
                 x_value = x[key]
                 y_value = y[key]
-                if isinstance(x_value, dict) and isinstance(y_value, dict):
-                    result_x_y = Util.recursionMergeTwoDict(x_value, y_value)
+                if key == 'TEST':
+                    if not x_value:
+                        x_value = []
+                    if not y_value:
+                        y_value = []
+                    x_value.extend(y_value)
+                    if key in z.keys():
+                        z['TEST'].extend(x_value)
+                        z['TEST'] = list(set(z['TEST']))
+                        z['TEST'].sort(key=z['TEST'].index)
+                    else:
+                        z['TEST'] = list(set(x_value))
+                        z['TEST'].sort(key=x_value.index)
                 else:
-                    result_x_y = y_value
-                z[key] = result_x_y
+                    if isinstance(x_value, dict) and isinstance(y_value, dict):
+                        result_x_y = Util.recursionMergeTwoDict(
+                            x_value, y_value)
+                    else:
+                        result_x_y = y_value
+                    z[key] = result_x_y
             else:
                 z[key] = x[key]
 
@@ -81,11 +95,15 @@ class Util:
                 # 合并同类项
                 x_value = x[key]
                 y_value = y[key]
-                if isinstance(x_value, dict) and isinstance(y_value, dict):
-                    result_x_y = Util.recursionMergeTwoDict(x_value, y_value)
+                if key == 'TEST':
+                    pass
                 else:
-                    result_x_y = y_value
-                z[key] = result_x_y
+                    if isinstance(x_value, dict) and isinstance(y_value, dict):
+                        result_x_y = Util.recursionMergeTwoDict(
+                            x_value, y_value)
+                    else:
+                        result_x_y = y_value
+                    z[key] = result_x_y
             else:
                 z[key] = y[key]
 
@@ -94,3 +112,7 @@ class Util:
     # 格式化dict格式
     def pretty(d):
         return json.dumps(d, indent=4, ensure_ascii=False)
+
+    # 在list a中但不在b中
+    def list_diff(a, b):
+        return list(set(a).difference(set(b)))
