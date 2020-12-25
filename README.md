@@ -118,6 +118,10 @@ BROWSER:
     bmp_path: your/browsermob-proxy/path
     #是否开启代理，开启后，配置listener的操作，会记录请求日志到logs目录下
     proxy: True/False
+    #H5
+    H5: True/False
+    #模拟的设备名称，目前只有在Chrome下生效，Firefox实现的策略是修改user_agent并设置浏览器界面大小
+    device_name: iPhone 7
 
 WEBSITE:
     #启动页地址
