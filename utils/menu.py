@@ -31,10 +31,9 @@ class Menu:
                     del copy_menu['submenu']
                     data.append(copy_menu)
                     menus = menu.get('submenu')
-
         return data
 
-    #递归获取下级所有submenu
+    # 递归获取下级所有submenu
     def getSubmenu(self, menus, data):
         if 'submenu' in menus.keys():
             submenus = menus.get('submenu')
@@ -48,5 +47,4 @@ class Menu:
                     self.getSubmenu(sm, data)
                 else:
                     data.append(copy_sm)
-
         return data

@@ -1,6 +1,6 @@
 MENU:
-    base_info:
-        key: base_info
+    testa:
+        key: testa
         name: 基础档案
         icon: menu-icon-4
         type: xpath
@@ -10,8 +10,8 @@ MENU:
         open:
             class: is-opened
         submenu:
-            company_info:
-                key: company_info
+            testa1:
+                key: testa1
                 name: 企业信息
                 type: xpath
                 content: //span[text()='企业信息']/..
@@ -263,7 +263,4 @@ MENU:
 
 TEST:
     - login
-#    - base_info.company_info.modify
-#    - base_info.user.add
-    - base_info.goods.add.save
-#    - base_info.depot.add.save
+    - testa
