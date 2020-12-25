@@ -1,6 +1,6 @@
 MENU:
-    base_info:
-        key: base_info
+    testb:
+        key: testb
         name: 基础档案
         icon: menu-icon-4
         type: xpath
@@ -10,8 +10,8 @@ MENU:
         open:
             class: is-opened
         submenu:
-            sale_price:
-                key: sale_price
+            testb1:
+                key: testb1
                 name: 销售价格
                 type: xpath
                 content: //span[text()='销售价格']/..
@@ -125,4 +125,4 @@ MENU:
 
 TEST:
     - login
-    - base_info.sale_price.add.save
+    - testb.testb1

@@ -1,6 +1,6 @@
 MENU:
-    delivery:
-        key: delivery
+    testc:
+        key: testc
         name: 送货
         icon: menu-icon-42
         type: xpath
@@ -10,8 +10,8 @@ MENU:
         open:
             class: is-opened
         submenu:
-            deliveryorder:
-                key: deliveryorder
+            testc1:
+                key: testc1
                 name: 送货单
                 type: xpath
                 content: //span[text()='送货单']/..
@@ -304,8 +304,5 @@ MENU:
 
 TEST:
     - login
-#    - delivery.deliveryorder.add.save
-#    - delivery.deliveryorder.add.noneordersave
-#    - delivery.deliveryorder.edit.save
-#    - delivery.deliveryorder.cancel
-    - delivery.deliveryorder.audit
+    - testc.testc1.add.save
+    - testc.testc1.audit
