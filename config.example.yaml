@@ -1,3 +1,5 @@
+DEBUG: True/False #是否开启调试模式，True-不生成生成报告，方便调试
+
 BROWSER:
     #浏览器类型
     type: Chrome/Firefox
