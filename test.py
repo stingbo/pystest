@@ -13,8 +13,9 @@ from utils.action import Action
 from utils.http import Http
 from utils.menu import Menu
 from utils.parametrized_test_case import ParametrizedTestCase
-from utils.test_config import TestConfig
+from utils.test_config import TestConfig, getFileName
 from HTMLTestRunner import HTMLTestRunner
+from utils.util import Util
 
 
 def main():
@@ -29,8 +30,18 @@ def main():
     # 当前脚本所在目录路径
     path = os.path.dirname(os.path.realpath(__file__))
 
-    # 获取测试用例数据
     test_config = TestConfig(path)
+
+    if len(sys.argv) > 1:
+        report_name = sys.argv[1]
+        if 'ls' == sys.argv[1]:
+            files = getFileName(path + '/config/')
+            print(Util.pretty(files))
+            return
+    else:
+        report_name = 'default'
+
+    # 获取测试用例数据
     config = test_config.get_test_case(sys.argv)
 
     # 是否开启代理
@@ -111,21 +122,23 @@ def main():
         except AssertExcetion:
             print(key + " 断言失败")
 
-    report_path = path + '/reports/'
-    if len(sys.argv) > 1:
-        report_name = sys.argv[1]
+    # 是否生成报告
+    debug = config.get('DEBUG')
+    if debug:
+        runner = unittest.TextTestRunner()
+        runner.run(suite)
     else:
-        report_name = 'default'
-    report_file = report_name + "_" + time.strftime("%Y%m%d",
-                                                    time.localtime()) + '.html'
-    fp = open(report_path + report_file, 'w', encoding='utf-8')
-    report_title = '你的测试报告'
-    report_desc = '使用配置:' + report_name + '生成的测试报告'
-    runner = HTMLTestRunner.HTMLTestRunner(stream=fp,
-                                           title=report_title,
-                                           description=report_desc)
-    runner.run(suite)
-    fp.close()
+        report_path = path + '/reports/'
+        report_file = report_name + "_" + time.strftime(
+            "%Y%m%d", time.localtime()) + '.html'
+        fp = open(report_path + report_file, 'w', encoding='utf-8')
+        report_title = '你的测试报告'
+        report_desc = '使用配置:' + report_name + '生成的测试报告'
+        runner = HTMLTestRunner.HTMLTestRunner(stream=fp,
+                                               title=report_title,
+                                               description=report_desc)
+        runner.run(suite)
+        fp.close()
 
     sleep(5)
     browser.quit()
