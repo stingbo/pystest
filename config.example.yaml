@@ -11,6 +11,8 @@ BROWSER:
     H5: True/False
     #模拟的设备名称，目前只有在Chrome下生效，Firefox实现的策略是修改user_agent并设置浏览器界面大小
     device_name: iPhone 7
+    #是否开启无头模式
+    headless: True/False
 
 WEBSITE:
     #启动页地址
