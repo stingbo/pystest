@@ -54,11 +54,20 @@ def main():
         proxy_server.start()
         proxy_client = proxy_server.create_proxy()
 
+    # 浏览器类型
     browser_type = config.get('BROWSER').get('type')
+
+    # 是否使用H5测试，并指定移动设备名称
     h5 = config.get('BROWSER').get('h5', False)
     device_name = config.get('BROWSER').get('device_name', 'iPhone 7')
+
+    # 是否开启无头模式
+    headless = config.get('BROWSER').get('headless', False)
+
     if browser_type == 'Firefox':
         options = FirefoxOptions()
+        if headless:
+            options.add_argument("-headless")
         options.page_load_strategy = 'normal'
         if h5:
             user_agent = "Mozilla/5.0 (iPhone; U; CPU iPhone OS 3_0 like Mac OS X; en-us) AppleWebKit/528.18 (KHTML, like Gecko) Version/4.0 Mobile/7A341 Safari/528.16"
@@ -70,6 +79,13 @@ def main():
         browser = webdriver.Firefox(options=options)
     elif browser_type == 'Chrome':
         options = ChromeOptions()
+        if headless:
+            options.add_argument("--window-size=1920,1080")
+            options.add_argument("--start-maximized")
+            options.add_argument("--headless")
+            options.add_argument('--no-sandbox')
+            options.add_argument('--disable-gpu')
+            options.add_argument('--disable-dev-shm-usage')
         options.page_load_strategy = 'normal'
         if h5:
             mobileEmulation = {'deviceName': device_name}
