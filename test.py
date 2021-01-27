@@ -58,7 +58,7 @@ def main():
     browser_type = config.get('BROWSER').get('type')
 
     # 是否使用H5测试，并指定移动设备名称
-    h5 = config.get('BROWSER').get('h5', False)
+    h5 = config.get('BROWSER').get('H5', False)
     device_name = config.get('BROWSER').get('device_name', 'iPhone 7')
 
     # 是否开启无头模式
