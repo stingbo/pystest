@@ -125,6 +125,7 @@
 #### YAML示例
 ```yaml
 DEBUG: True/False #是否开启调试模式，True-不生成生成报告，方便调试
+IMAGE: True/False #是否截图，DEBUG为False且IMAGE设置为True时截图
 
 BROWSER:
     #浏览器类型

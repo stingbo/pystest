@@ -12,9 +12,10 @@ from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from utils.action import Action
 from utils.http import Http
 from utils.menu import Menu
+from HwTestReport import HTMLTestReport as HTMLTestRunner
 from utils.parametrized_test_case import ParametrizedTestCase
 from utils.test_config import TestConfig, getFileName
-from HTMLTestRunner import HTMLTestRunner
+# from HTMLTestRunner import HTMLTestRunner
 from utils.util import Util
 
 
@@ -138,21 +139,26 @@ def main():
         except AssertExcetion:
             print(key + " 断言失败")
 
-    # 是否生成报告
-    debug = config.get('DEBUG')
+    # 是否生成报告，默认开启调试模式，不生成报告
+    debug = config.get('DEBUG', True)
     if debug:
         runner = unittest.TextTestRunner()
         runner.run(suite)
     else:
+        # 报告是否含有截图，DEBUG为False且IMAGE设置为True时生效
+        image = config.get('IMAGE', False)
         report_path = path + '/reports/'
         report_file = report_name + "_" + time.strftime(
             "%Y%m%d", time.localtime()) + '.html'
-        fp = open(report_path + report_file, 'w', encoding='utf-8')
+        fp = open(report_path + report_file, 'wb')
         report_title = '你的测试报告'
         report_desc = '使用配置:' + report_name + '生成的测试报告'
-        runner = HTMLTestRunner.HTMLTestRunner(stream=fp,
-                                               title=report_title,
-                                               description=report_desc)
+        runner = HTMLTestRunner(stream=fp,
+                                verbosity=2,
+                                images=image,
+                                title=report_title,
+                                description=report_desc,
+                                tester='pystest')
         runner.run(suite)
         fp.close()
 

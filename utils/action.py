@@ -18,6 +18,7 @@ class Action(ParametrizedTestCase):
     def test_menu(self):
         self.browser = self.param[0]
         self.el = Element(self.param[0])
+        self.imgs = []
         menus = self.param[1]
         try:
             proxy = self.param[2]
@@ -67,6 +68,7 @@ class Action(ParametrizedTestCase):
                                   'captureBinaryContent': True
                               })
 
+            self.get_screenshot()
             if 'operation' in menu.keys():
                 for op in menu.get('operation'):
                     self.operation(op)
@@ -148,3 +150,7 @@ class Action(ParametrizedTestCase):
         # 执行具体动作
         op = Operation(self.browser, element)
         op.operation(config)
+        self.get_screenshot()
+
+    def get_screenshot(self):
+        self.imgs.append(self.browser.get_screenshot_as_base64())
