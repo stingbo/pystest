@@ -262,5 +262,5 @@ MENU:
                                         action: sendKeys
 
 TEST:
-    - login
+    - login #表示config.example.yaml里的loign配置
     - testa

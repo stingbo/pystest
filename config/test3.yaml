@@ -303,6 +303,6 @@ MENU:
                                 action: click
 
 TEST:
-    - login
+    - login #表示config.example.yaml里的loign配置
     - testc.testc1.add.save
     - testc.testc1.audit

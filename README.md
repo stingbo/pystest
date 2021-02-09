@@ -2,13 +2,20 @@
 
 ## 快速开始
 
-- 复制并修改全局配置，```cp config.example.yaml config.yaml```，此文件为全局配置，config目录下文件可覆盖此配置
+- 复制并修改全局配置，`cp config.example.yaml config.yaml`，此文件为全局配置，config目录下文件可覆盖此配置
 
-- 使用：```python test.py filename```，filename 为项目 config 目录下的文件名，如`python3 test.py default`，没有输入文件名，
-则默认使用`default.yaml`，可以同时执行多个测试用例，如`python3 test.py test1,test2,test3`，或者执行 config 目录下所有的测试
-用例：`python3 test.py all_test`
-
+- 使用：`python test.py filename`，filename 为项目 config 目录下的文件名，如`python3 test.py default`，没有输入文件名，
+则默认使用`default.yaml`
+  
 - 测试用例采用YAML通用格式编写，详见[YAML示例](#YAML示例)
+  
+## 其它命令
+
+- 查看 config 目录下所有用例:`python3 test.py ls`
+
+- 同时执行多个测试用例:`python3 test.py test1,test2,test3`
+  
+- 执行 config 目录下所有的测试用例：`python3 test.py all_test`
 
 ### 依赖
 
