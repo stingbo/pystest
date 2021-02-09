@@ -9,6 +9,8 @@
   
 - 测试用例采用YAML通用格式编写，详见[YAML示例](#YAML示例)
   
+- 执行已有示例：`python3 test.py default,test1`，打开百度搜索 "stingbo pystest"，跳转到github目录，并打开指定项目
+  
 ## 其它命令
 
 - 查看 config 目录下所有用例:`python3 test.py ls`
