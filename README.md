@@ -9,7 +9,7 @@
   
 - 测试用例采用YAML通用格式编写，详见[YAML示例](#YAML示例)
   
-- 执行已有示例：`python3 test.py default,test1`，打开百度搜索 "stingbo pystest"，跳转到github目录，并打开指定项目
+- 执行已有用例：`python3 test.py default,test1`，打开百度并搜索 "stingbo pystest"，然后跳转到github目录，最后打开指定项目
   
 ## 其它命令
 
@@ -67,7 +67,7 @@
                                                           
         > device_name: 字符串，h5 模式下模拟的设备名称，目前只有在Chrome下生效，Firefox实现的策略是修改user_agent并设置浏览器界面大小
 
-        > headless: 布尔，`True/False`，是否开启无头模式，无界面测试，方便集成到自动化部署
+        > headless: 布尔，`True/False`，是否开启无头模式，无界面测试，方便集成到服务器自动化部署
     
     3. WEBSITE，启动页面的设置
     
@@ -112,7 +112,7 @@
 
         > wait_time: 数字，指定某个动作固定等待的时间，单位秒
     
-    5. TEST，数组，具体执行的测试用例，如果`testa2`下还有`submenu`，则会自动获取并执行，多个文件的`TEST`配置
+    5. TEST，数组，指定具体执行的测试用例，如果`testa2`下还有`submenu`，则会自动获取并执行，多个文件的`TEST`配置
     会合并执行，执行顺序是输入测试用例时的名称顺序
         ```yaml
         TEST:
