@@ -1,5 +1,7 @@
 # 使用Python Selenium 进行自动化测试
 
+- 支持在PC、H5上运行，代理获取接口数据，无头模式，生成报告（含截图），发送邮件等
+
 ## 快速开始
 
 - 复制并修改全局配置，`cp config.example.yaml config.yaml`，此文件为全局配置，config目录下文件可覆盖此配置
@@ -52,10 +54,13 @@
 
     > 8. 根据 action 执行动作
 
-* 配置文件内容分为五类，格式说明如下：  
-    1. DEBUG: 布尔，`True/False`，是否开启调试模式，True-不生成生成报告，方便调试
+* 配置文件分为以下内容，格式说明如下：  
+    1. DEBUG: 布尔，`True/False`，是否开启调试模式，True-不生成生成报告，方便调试  
+       IMAGE: 布尔，`True/False`，是否截图，DEBUG为False且IMAGE设置为True时截图
+       
+    2. MAIL: 邮箱配置，配置正确会发送测试用例执行报告
 
-    2. BROWSER，对浏览器层的设置
+    3. BROWSER，对浏览器层的设置
     
         > type: 字符串，使用浏览器类型，目前支持 `Chrome/Firefox`
                                                           
@@ -69,11 +74,11 @@
 
         > headless: 布尔，`True/False`，是否开启无头模式，无界面测试，方便集成到服务器自动化部署
     
-    3. WEBSITE，启动页面的设置
+    4. WEBSITE，启动页面的设置
     
         > url: 字符串，启动页地址，目前只有这一个配置可用
     
-    4. MENU，测试用例详情
+    5. MENU，测试用例详情
     
         > key: 字符串，菜单路径
         
@@ -126,6 +131,19 @@
 ```yaml
 DEBUG: True/False #是否开启调试模式，True-不生成生成报告，方便调试
 IMAGE: True/False #是否截图，DEBUG为False且IMAGE设置为True时截图
+
+MAIL:
+    SEND: True/False
+    # 邮箱服务端配置
+    SMTP:
+        username: sting_bo@163.com
+        password: xxxxxxxxxx
+        host: smtp.163.com
+        port: 25
+    # 收件人列表
+    receiver:
+        - 598207213@qq.com
+        - 1107453152@qq.com
 
 BROWSER:
     #浏览器类型
