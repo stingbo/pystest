@@ -32,6 +32,9 @@ class Action(ParametrizedTestCase):
                 time.strftime("%H:%M:%S", time.localtime()) + " " +
                 menu.get('name'))
 
+            for handle in self.browser.window_handles:  # 始终获得当前最后的窗口，所以多要多次使用
+                self.browser.switch_to_window(handle)
+
             # 是否等待页面消失
             if 'wait_disappear' in menu.keys():
                 wait = WebDriverWait(self.browser, 10, poll_frequency=1)
