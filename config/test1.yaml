@@ -13,12 +13,8 @@ MENU:
                 name: 打开github里pystest项目
                 type: xpath
                 content: //a[@href='/stingbo/pystest']
-#                content: //*[@id="js-pjax-container"]/div[2]/div/div[2]/div[2]/div/div[1]/div/ol/li[3]/div/div/div/a
                 index: 0
                 action: click
-#                wait:
-#                    type: xpath
-#                    content: "//a[@href='/stingbo/pystest']"
 
 TEST:
     - pystest.open
