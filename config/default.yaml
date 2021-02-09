@@ -19,7 +19,7 @@ MENU:
                 type: id
                 content: kw
                 index: -1
-                value: 测试使用selenium
+                value: stingbo pystest
                 action: sendKeys
 
 TEST:
