@@ -4,7 +4,8 @@ import yaml
 from utils.util import Util
 
 
-def getFileName(config_files):
+def getFileName(path):
+    config_files = os.listdir(path)
     all_test_files = []
     for name in config_files:
         index = name.rfind('.')
@@ -32,11 +33,8 @@ class TestConfig:
             gf = open(global_config_file_path, 'r', encoding='utf-8')
             global_config = yaml.safe_load(gf.read())
 
-        # 所有测试用例
-        config_files = os.listdir(self.path + '/config/')
-
         # 所有不含后缀名称的测试用例
-        all_test_files = getFileName(config_files)
+        all_test_files = getFileName(self.path + '/config/')
 
         test_cases = []
         # 是否传入配置文件
