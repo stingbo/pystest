@@ -12,6 +12,7 @@ from selenium.webdriver.firefox.options import Options as FirefoxOptions
 from utils.action import Action
 from utils.http import Http
 from utils.menu import Menu
+from utils.mail import Mail
 from HwTestReport import HTMLTestReport as HTMLTestRunner
 from utils.parametrized_test_case import ParametrizedTestCase
 from utils.test_config import TestConfig, getFileName
@@ -164,6 +165,17 @@ def main():
 
     sleep(5)
     browser.quit()
+
+    # send mail or not
+    mail = config.get('MAIL')
+    if not debug and mail and mail.get('SEND'):
+        email_title = report_title
+        email_content = report_desc
+        smtp = Mail(config.get('MAIL'), report_path)
+        smtp.connect()
+        smtp.login()
+        smtp.send(email_title, email_content, report_file)
+        smtp.quit()
 
     if is_open_proxy:
         proxy_client.close()

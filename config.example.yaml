@@ -1,6 +1,19 @@
 DEBUG: True/False #是否开启调试模式，True-不生成生成报告，方便调试
 IMAGE: True/False #是否截图，DEBUG为False且IMAGE设置为True时截图
 
+MAIL:
+    SEND: True/False #是否开启发送邮箱配置，前提是，在DEBUG为false情况下生效
+    # 邮箱服务端配置
+    SMTP:
+        username: sting_bo@163.com
+        password: xxxxxxxxxx
+        host: smtp.163.com
+        port: 25
+    # 收件人列表
+    receiver:
+        - 598207213@qq.com
+        - 1107453152@qq.com
+
 BROWSER:
     #浏览器类型
     type: Chrome/Firefox
