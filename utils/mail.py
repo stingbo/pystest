@@ -4,7 +4,6 @@ from email.mime.application import MIMEApplication
 from email.mime.text import MIMEText
 from email.mime.image import MIMEImage
 from email.mime.audio import MIMEAudio
-# from email.utils import COMMASPACE
 import smtplib
 import os
 
@@ -38,7 +37,7 @@ class Mail(object):
         except:
             raise AttributeError('Can not login smtp!!!')
 
-    def send(self, email_title, email_content):
+    def send(self, email_title, email_content, email_attachment=""):
         """
         send email
         """
@@ -46,11 +45,15 @@ class Mail(object):
         msg['From'] = self.sender  # sender
         msg['To'] = ', '.join(self.receiver)
         msg['Subject'] = email_title  # email Subject
-        content = MIMEText(email_content, _charset='gbk')  # add email content  ,coding is gbk, becasue chinese exist
+        content = MIMEText(email_content, _charset='gbk')  # add email content, coding is gbk, because chinese exist
         msg.attach(content)
 
+        # 是否指定附件，否，则发送目录下所有文件
         for attachment_name in os.listdir(self.attachment_path):
-            attachment_file = os.path.join(self.attachment_path, attachment_name)
+            if email_attachment and attachment_name != email_attachment:
+                continue
+            else:
+                attachment_file = os.path.join(self.attachment_path, attachment_name)
 
             with open(attachment_file, 'rb') as attachment:
                 if 'application' == 'text':
