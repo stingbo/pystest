@@ -68,7 +68,7 @@
                                                           
         > proxy: 布尔，`True/False`，是否开启代理
                                                           
-        > h5: 布尔，`True/False`，是否使用 h5 进行测试打开浏览器
+        > H5: 布尔，`True/False`，是否使用 h5 进行测试打开浏览器
                                                           
         > device_name: 字符串，h5 模式下模拟的设备名称，目前只有在Chrome下生效，Firefox实现的策略是修改user_agent并设置浏览器界面大小
 
