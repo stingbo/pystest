@@ -40,6 +40,12 @@ def main():
             files = getFileName(path + '/config/')
             print(Util.pretty(files))
             return
+        if '-f' == sys.argv[1] and len(sys.argv) < 3:
+            print("请输入测试用例文件路径(绝对路径)")
+            return
+        else:
+            test_case_path = sys.argv[2]
+            print("测试用例文件路径为："+test_case_path)
     else:
         report_name = 'default'
 
