@@ -47,7 +47,7 @@ class TestConfig:
                 test_files = test_file.split(',')
                 files = Util.list_diff(test_files, all_test_files)
                 if len(files) > 0:
-                    raise Exception(print('配置文件不存在: ', ', '.join(files)))
+                    raise Exception(print('测试用例文件不存在: ', ', '.join(files)))
 
                 test_cases = getAllTestCase(self.path, test_files)
         else:
@@ -59,7 +59,7 @@ class TestConfig:
         configs = {}
         for test_case in test_cases:
             if not os.path.isfile(test_case):
-                raise Exception(print('配置文件不存在: ' + test_case))
+                raise Exception(print('测试用例文件不存在: ' + test_case))
 
             f = open(test_case, 'r', encoding='utf-8')
             config = yaml.safe_load(f.read())
