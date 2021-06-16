@@ -43,6 +43,17 @@ class TestConfig:
             # 执行所有测试用例
             if test_file == 'all_test':
                 test_cases = getAllTestCase(self.path, all_test_files)
+            elif '-f' == test_file:  # 执行配置文件里的测试用例
+                test_case_path = argv[2]
+                with open(test_case_path) as file_obj:
+                    content = file_obj.read()
+
+                test_files = content.replace('\n', '').replace('\r', '').split(',')
+                files = Util.list_diff(test_files, all_test_files)
+                if len(files) > 0:
+                    raise Exception(print('测试用例文件不存在: ', ', '.join(files)))
+
+                test_cases = getAllTestCase(self.path, test_files)
             else:  # 执行所传入的测试用例
                 test_files = test_file.split(',')
                 files = Util.list_diff(test_files, all_test_files)

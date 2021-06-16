@@ -36,16 +36,22 @@ def main():
 
     if len(sys.argv) > 1:
         report_name = sys.argv[1]
+        # 使用命令显示目录下文件
         if 'ls' == sys.argv[1]:
             files = getFileName(path + '/config/')
             print(Util.pretty(files))
             return
+        # 使用文件方式调用测试用例
         if '-f' == sys.argv[1] and len(sys.argv) < 3:
-            print("请输入测试用例文件路径(绝对路径)")
+            print('请输入测试用例配置文件路径(绝对路径)')
             return
         else:
             test_case_path = sys.argv[2]
-            print("测试用例文件路径为："+test_case_path)
+            if os.path.exists(test_case_path):
+                print('测试用例文件路径为：'+test_case_path)
+            else:
+                print('测试用例文件不存在')
+                return
     else:
         report_name = 'default'
 
