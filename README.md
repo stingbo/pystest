@@ -18,6 +18,11 @@
 - 查看 config 目录下所有用例:`python3 test.py ls`
 
 - 同时执行多个测试用例:`python3 test.py test1,test2,test3`
+
+- 使用配置文件执行测试用例:`python3 test.py -f /your/path/test.txt`，文件内容为：
+    ```test.txt
+    test1,test2,test3
+    ```
   
 - 执行 config 目录下所有的测试用例：`python3 test.py all_test`
 
