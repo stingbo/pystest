@@ -97,11 +97,11 @@ def main():
     elif browser_type == 'Chrome':
         options = ChromeOptions()
         if headless:
+            options.add_argument('--no-sandbox')  # 取消沙盒模式，浏览器的安全性会降低
             options.add_argument("--window-size=1920,1080")  # 设置浏览器分辨率（窗口大小）
             options.add_argument(
                 "--start-maximized")  # 最大化运行（全屏窗口），不设置，获取元素可能会报错
             options.add_argument("--disable-extensions")
-            options.add_argument('--no-sandbox')  # 取消沙盒模式，浏览器的安全性会降低
             # 禁用GPU加速，降低资源损耗，only for Windows but not a valid configuration for Linux OS
             options.add_argument('--disable-gpu')
             options.add_argument('--disable-dev-shm-usage')  # 解决资源有限的问题
