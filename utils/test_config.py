@@ -48,7 +48,8 @@ class TestConfig:
                 with open(test_case_path) as file_obj:
                     content = file_obj.read()
 
-                test_files = content.replace('\n', '').replace('\r', '').split(',')
+                test_files = content.replace('\n', '').replace('\r',
+                                                               '').split(',')
                 files = Util.list_diff(test_files, all_test_files)
                 if len(files) > 0:
                     raise Exception(print('测试用例文件不存在: ', ', '.join(files)))

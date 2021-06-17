@@ -37,6 +37,8 @@ class Operation:
             self.clickList()
         elif action == 'moveToClick':
             self.moveToClick()
+        elif action == 'moveToClickList':
+            self.moveToClickList()
         elif action == 'jsclick':
             self.jsclick()
         elif action == 'sendKeys':
@@ -45,6 +47,8 @@ class Operation:
             self.sendKeys(config.get('value'), True)
         elif action == 'sendListKeys':
             self.sendListKeys(config.get('value'), True)
+        elif action == 'sendListKeys_10':
+            self.sendListKeys_10(config.get('value'), True)
         elif action == 'upload':
             self.upload(config.get('value'))
         elif 'select' in action:
@@ -76,6 +80,11 @@ class Operation:
     def moveToClick(self):
         ActionChains(self.browser).click(self.element).perform()
 
+    # 移动并点击操作
+    def moveToClickList(self):
+        for el in self.element:
+            ActionChains(self.browser).click(el).perform()
+
     # 默认填写值
     def sendKeys(self, value, modify=False):
         self.writeKey(self.element, value, modify)
@@ -83,6 +92,15 @@ class Operation:
     # 给列表填写值
     def sendListKeys(self, value, modify=False):
         for el in self.element:
+            self.writeKey(el, value, modify)
+
+    # 给列表填写值(10次)
+    def sendListKeys_10(self, value, modify=False):
+        i = 0
+        for el in self.element:
+            if i == 10:
+                break
+            i = i + 1
             self.writeKey(el, value, modify)
 
     # 上传文件

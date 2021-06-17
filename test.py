@@ -35,23 +35,26 @@ def main():
     test_config = TestConfig(path)
 
     if len(sys.argv) > 1:
-        report_name = sys.argv[1]
+        param_type = sys.argv[1]
         # 使用命令显示目录下文件
-        if 'ls' == sys.argv[1]:
+        if 'ls' == param_type:
             files = getFileName(path + '/config/')
             print(Util.pretty(files))
             return
-        # 使用文件方式调用测试用例
-        if '-f' == sys.argv[1] and len(sys.argv) < 3:
-            print('请输入测试用例配置文件路径(绝对路径)')
-            return
-        else:
-            test_case_path = sys.argv[2]
-            if os.path.exists(test_case_path):
-                print('测试用例文件路径为：'+test_case_path)
-            else:
-                print('测试用例文件不存在')
+        elif '-f' == param_type:  # 使用文件路径方式调用测试用例
+            if len(sys.argv) < 3:
+                print('请输入测试用例配置文件路径(绝对路径)')
                 return
+            else:
+                test_case_path = sys.argv[2]
+                report_name = '使用配置文件自动化测试'
+                if os.path.exists(test_case_path):
+                    print('测试用例文件路径为：' + test_case_path)
+                else:
+                    print('测试用例文件不存在')
+                    return
+        else:  # 直接传入测试用例名称
+            report_name = param_type
     else:
         report_name = 'default'
 
@@ -94,12 +97,16 @@ def main():
     elif browser_type == 'Chrome':
         options = ChromeOptions()
         if headless:
-            options.add_argument("--window-size=1920,1080")
-            options.add_argument("--start-maximized")
-            options.add_argument("--headless")
-            options.add_argument('--no-sandbox')
+            options.add_argument("--window-size=1920,1080")  # 设置浏览器分辨率（窗口大小）
+            options.add_argument(
+                "--start-maximized")  # 最大化运行（全屏窗口），不设置，获取元素可能会报错
+            options.add_argument("--disable-extensions")
+            options.add_argument('--no-sandbox')  # 取消沙盒模式，浏览器的安全性会降低
+            # 禁用GPU加速，降低资源损耗，only for Windows but not a valid configuration for Linux OS
             options.add_argument('--disable-gpu')
-            options.add_argument('--disable-dev-shm-usage')
+            options.add_argument('--disable-dev-shm-usage')  # 解决资源有限的问题
+            options.add_argument('--lang=en_US')
+            options.add_argument("--headless")
         options.page_load_strategy = 'normal'
         if h5:
             mobileEmulation = {'deviceName': device_name}
