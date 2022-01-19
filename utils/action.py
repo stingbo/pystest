@@ -37,7 +37,7 @@ class Action(ParametrizedTestCase):
             search_windows = self.browser.current_window_handle
             for handle in self.browser.window_handles:
                 if handle != search_windows:
-                    self.browser.switch_to_window(handle)
+                    self.browser.switch_to.window(handle)
 
             # 是否等待页面消失
             if 'wait_disappear' in menu.keys():
