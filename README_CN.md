@@ -197,6 +197,28 @@ MENU:
                 action: sendKeys
 ```
     
+#### 步骤断言
+
+在菜单项里添加与 `action` 同级的 `assert` 列表。所有断言都通过，该步骤才通过。框架在执行操作后检查断言，并在 `after_operation` 后置操作完成后报告失败。
+
+```yaml
+assert:
+    - check: exists
+      type: id
+      content: logout
+    - check: not_exists
+      type: id
+      content: login
+    - check: text_equals
+      type: id
+      content: welcome
+      expected: "欢迎回来"
+    - check: url_ends_with
+      expected: "/home"
+```
+
+前两条检查 Selenium 能否定位到元素。`text_equals` 精确比较元素文本，`url_ends_with` 检查当前完整网址的结尾。只有一条断言时也可以直接写成映射。旧配置继续使用 `type`、`content` 和内层的 `assert: 1`（应存在）或 `assert: 0`（应不存在）。
+
 #### 总结
 
 * _使用 contents 多次获取元素时，在上一次范围内获取元素，使用 .//(点+双斜线)_

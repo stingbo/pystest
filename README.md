@@ -113,6 +113,28 @@ MENU:
         action: sendKeys
 ```
 
+#### Step assertions
+
+Add an `assert` list to a menu item at the same level as `action`. All checks must pass. The runner checks them after the action and reports failures after any `after_operation` actions.
+
+```yaml
+assert:
+  - check: exists
+    type: id
+    content: logout
+  - check: not_exists
+    type: id
+    content: login
+  - check: text_equals
+    type: id
+    content: welcome
+    expected: "Welcome back"
+  - check: url_ends_with
+    expected: "/home"
+```
+
+The first two checks test whether Selenium can locate an element. `text_equals` compares the element's text exactly, and `url_ends_with` checks the full current URL. A single assertion can also be written as a mapping. Existing mappings with `type`, `content`, and an inner `assert: 1` (exists) or `assert: 0` (does not exist) still work.
+
 #### Conclusion
 * _Use contents to obtain elements within the scope of the previous one, using `.(dot + double slash)._
 
