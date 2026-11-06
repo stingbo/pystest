@@ -219,6 +219,28 @@ assert:
 
 前两条检查 Selenium 能否定位到元素。`text_equals` 精确比较元素文本，`url_ends_with` 检查当前完整网址的结尾。只有一条断言时也可以直接写成映射。旧配置继续使用 `type`、`content` 和内层的 `assert: 1`（应存在）或 `assert: 0`（应不存在）。
 
+#### 并行执行用例组
+
+在配置顶层添加 `TEST_GROUPS`，可用 `PARALLEL_WORKERS` 指定同时运行的组数上限。每个组使用独立的浏览器会话，按列表顺序执行 `MENU` 中的用例。
+
+```yaml
+PARALLEL_WORKERS: 3
+
+TEST_GROUPS:
+    checkout:
+        - login
+        - place_order
+        - view_order
+    search:
+        - search_products
+    help:
+        - open_help
+```
+
+默认最多同时运行 2 个组。如果 `login` 失败，`checkout` 组的后续用例会跳过，其他组继续执行。终端汇总会显示跳过的用例及其前置用例。配置 `DEBUG: False` 时，每组生成一份 HTML 报告。
+
+旧的 `TEST` 列表继续在同一个浏览器里串行执行。两种配置同时存在时，先执行 `TEST`，再启动 `TEST_GROUPS`。
+
 #### 总结
 
 * _使用 contents 多次获取元素时，在上一次范围内获取元素，使用 .//(点+双斜线)_

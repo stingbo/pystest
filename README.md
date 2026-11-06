@@ -135,6 +135,28 @@ assert:
 
 The first two checks test whether Selenium can locate an element. `text_equals` compares the element's text exactly, and `url_ends_with` checks the full current URL. A single assertion can also be written as a mapping. Existing mappings with `type`, `content`, and an inner `assert: 1` (exists) or `assert: 0` (does not exist) still work.
 
+#### Running test groups in parallel
+
+Add `TEST_GROUPS` and optionally `PARALLEL_WORKERS` at the top level. Each group starts its own browser session and runs the listed `MENU` cases in order.
+
+```yaml
+PARALLEL_WORKERS: 3
+
+TEST_GROUPS:
+  checkout:
+    - login
+    - place_order
+    - view_order
+  search:
+    - search_products
+  help:
+    - open_help
+```
+
+The worker limit defaults to 2. If `login` fails, the remaining `checkout` cases are skipped and the other groups continue. The terminal summary names skipped cases and their failed prerequisites. With `DEBUG: False`, each group writes a separate HTML report.
+
+Existing `TEST` cases still run serially in a shared browser. If both keys are present, the `TEST` list runs first in its own session, followed by `TEST_GROUPS`.
+
 #### Conclusion
 * _Use contents to obtain elements within the scope of the previous one, using `.(dot + double slash)._
 
